@@ -172,12 +172,14 @@ def add_footer():
         text-align: center;
         padding: 10px;
         font-size: 0.9rem;
+        z-index: 1000;
     }
     .footer a {
         color: #2c3e50;
         text-decoration: none;
         margin: 0 10px;
         transition: color 0.3s ease;
+        cursor: pointer;
     }
     .footer a:hover {
         color: #ff5722;
@@ -193,6 +195,7 @@ def add_footer():
         <a href="#terms-of-use">Terms of Use</a>
     </div>
     """, unsafe_allow_html=True)
+
 
 def transcribe_page():
     st.markdown('<div class="transcribe-container">', unsafe_allow_html=True)
@@ -275,11 +278,13 @@ def how_it_works_page():
     st.markdown('</div>', unsafe_allow_html=True)
 
 def faq_page():
-    st.markdown('<div id="faq"></div>', unsafe_allow_html=True)  # Add an anchor for scrolling
+    # Add an anchor for scrolling
+    st.markdown('<div id="faq"></div>', unsafe_allow_html=True)
+    
     st.header("Frequently Asked Questions")
     
     faqs = [
-        (" What types of audio files can I upload?", "We support **MP3, MP4, WAV, M4A, WEBM, and more.** If your format isn’t listed, try converting it to a supported type."),
+        (" What types of audio files can I upload?", "We support **MP3, MP4, WAV, M4A, WEBM, and more.** If your format isn't listed, try converting it to a supported type."),
         (" Is there a file size limit?", "Yes, you can upload files up to **25MB**, which is about **5 minutes of high-quality audio.**"),
         (" How fast is the transcription?", "Our AI delivers transcriptions in **seconds**, so you get your text **faster than you can type!**"),
         (" How accurate is the transcription?", "We use **cutting-edge AI** to provide highly accurate transcriptions. Clear audio means even **better results!**"),
@@ -294,7 +299,7 @@ def faq_page():
     st.markdown("---")
     st.subheader("Have more questions?")
     st.write("If you need further assistance, feel free to reach out:")
-    st.markdown(" **Email:** [a@idealabs.fyi](mailto:a@idealabs.fyi)")        
+    st.markdown(" **Email:** [a@idealabs.fyi](mailto:a@idealabs.fyi)")       
 
 if __name__ == "__main__":
     main()
