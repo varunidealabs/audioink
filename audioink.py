@@ -84,112 +84,125 @@ page = st.sidebar.radio("Navigation", ["Home", "Upload Audio", "Record Audio", "
 
 
 if page=="Home":
-    # Custom CSS for enhanced typography and colors
+    # Custom CSS
     st.markdown("""
     <style>
-        .crazy-title {
-            font-family: 'Impact', sans-serif;
-            color: #FF6B6B;
+        /* Reset default Streamlit styling */
+        .stApp {
+            background-color: #f8f8fb;
+            font-family: 'Inter', 'Helvetica Neue', sans-serif;
+        }
+        
+        /* Main Container Styling */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
             text-align: center;
-            font-size: 3.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            margin-bottom: 20px;
         }
-        .crazy-subtitle {
-            font-family: 'Courier New', monospace;
-            color: #4ECDC4;
-            text-align: center;
-            font-size: 1.5em;
-            font-style: italic;
-            margin-bottom: 30px;
+        
+        /* Hero Title Styling */
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: #2c3e50;
+            line-height: 1.2;
+            margin-bottom: 1rem;
         }
-        .section-header {
-            font-family: 'Arial Black', sans-serif;
-            color: #FF6B6B;
-            font-size: 1.8em;
-            border-bottom: 3px solid #FF6B6B;
-            padding-bottom: 10px;
-            margin-top: 20px;
+        
+        /* Highlight Word Styling */
+        .highlight {
+            color: #ff5722;
         }
-        .emoji-list {
-            font-family: 'Arial', sans-serif;
-            color: #2A9D8F;
-            font-size: 1.2em;
-            line-height: 1.6;
+        
+        /* Subtitle Styling */
+        .subtitle {
+            font-size: 1.5rem;
+            color: #637082;
+            max-width: 700px;
+            margin: 0 auto 2rem;
         }
-        .warning-section {
-            background-color: #FFD93D;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
+        
+        /* Button Styling */
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
         }
-        .disclaimer {
-            font-family: 'Comic Sans MS', cursive;
-            color: #6A5ACD;
-            font-style: italic;
-            text-align: center;
-            margin-top: 20px;
+        .cta-buttons a {
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .primary-button {
+            background-color: #ff5722;
+            color: white !important;
+        }
+        .secondary-button {
+            background-color: #f0f0f5;
+            color: #2c3e50 !important;
+        }
+        
+        /* Microphone Icon Styling */
+        .microphone-icon {
+            font-size: 5rem;
+            color: #ff5722;
+            margin-top: 2rem;
         }
     </style>
     """, unsafe_allow_html=True)
 
-    # Crazy Title
-    st.markdown('<h1 class="crazy-title">🎙️ AudioScribe</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="crazy-subtitle">No more typing, no more lost ideas. Just talk, and boom </p>', unsafe_allow_html=True)
-
-    # Imagine This Chaos Section
-    st.markdown('<h2 class="section-header">🤪 Imagine This Chaos...</h2>', unsafe_allow_html=True)
-    st.markdown("""
-    <div class="emoji-list">
-    AudioPen converts voice notes into text that's easy to read and ready to share. 
+    # Main Container
+    st.markdown('<div class="main-container">', unsafe_allow_html=True)
+    
+    # Hero Title
+    st.markdown('''
+    <h1 class="hero-title">
+        Go from <span class="highlight">fuzzy thought</span><br>
+        to clear text. <span class="highlight">Fast.</span>
+    </h1>
+    ''', unsafe_allow_html=True)
+    
+    # Subtitle
+    st.markdown('''
+    <p class="subtitle">
+    AudioScribe converts voice notes into text that's easy to read and ready to share.
+    Create meeting notes, memos, emails, articles and more. 
+    All you have to do is talk.
+    </p>
+    ''', unsafe_allow_html=True)
+    
+    # CTA Buttons
+    st.markdown('''
+    <div class="cta-buttons">
+        <a href="#" class="cta-buttons a primary-button">Start Transcribing</a>
+        <a href="#" class="cta-buttons a secondary-button">See How It Works</a>
     </div>
-    """, unsafe_allow_html=True)
-
-    # Madness Explained
-    st.markdown('<h2 class="section-header">The Madness Explained</h2>', unsafe_allow_html=True)
+    ''', unsafe_allow_html=True)
     
-    col1, col2 = st.columns(2)
+    # Microphone Icon
+    st.markdown('<div class="microphone-icon text-center">🎤</div>', unsafe_allow_html=True)
     
-    with col1:
-        st.markdown("""
-        ### 🎤 Record Mode
-        - Just. Start. Talking. 
-        - No judgment zone! 
-        - Speak like nobody's listening
-        - Turn brain's wild stream of consciousness into readable text
-        """)
-    
-    with col2:
-        st.markdown("""
-        ### 📁 Upload Mode
-        - Got an old voice memo? 
-        - Random audio file collecting dust? 
-        - Grandpa's legendary story? 
-        - WE. WILL. DECODE. IT. 🕵️‍♀️
-        """)
-
-    # Warning Section
-    st.markdown('<div class="warning-section">', unsafe_allow_html=True)
-    st.markdown('<h2 class="section-header">🌈 Warning: Side Effects May Include</h2>', unsafe_allow_html=True)
-    st.markdown("""
-    - Sudden bursts of productivity
-    - Uncontrollable feeling of being a tech wizard
-    - Permanent grin from how cool transcription can be
-    - Potential addiction to talking to your devices
-    """)
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # Pro Tip
-    st.markdown('<h2 class="section-header">🤯 Pro Tip</h2>', unsafe_allow_html=True)
-    st.markdown("""
-    Our AI doesn't just transcribe. It understands your chaotic brilliance. 
-    Mumble, stutter, use bizarre analogies - we'll turn it into Shakespeare-level prose! 
-    (Okay, maybe not Shakespeare, but definitely coherent text)
-    """)
-
-    # Disclaimer
-    st.markdown('<p class="disclaimer">🎤 SPEAK. WE LISTEN. MAGIC HAPPENS. 🔮</p>', unsafe_allow_html=True)
-    st.markdown('<p class="disclaimer">AudioScribe is not responsible for world-changing ideas or podcaster ambitions!</p>', unsafe_allow_html=True)
+    # Adding functionality to the buttons
+    col1, col2 = st.columns([1,1])
+    with col1:
+        if st.button("Start Transcribing", use_container_width=True):
+            st.switch_page("pages/transcribe.py")
+    
+    with col2:
+        if st.button("How It Works", use_container_width=True):
+            st.info("""
+            AudioScribe makes transcription super easy:
+            1. Click 'Start Transcribing'
+            2. Either upload an audio file or record directly
+            3. Our AI instantly converts your audio to text
+            4. Edit, copy, or save your transcription
+            """)
 
 elif page == "Upload Audio":
     st.subheader("Upload Audio File")
