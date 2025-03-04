@@ -80,9 +80,121 @@ def convert_to_wav(audio_file):
 st.sidebar.image("mic.png", width=100)
 st.sidebar.markdown("<div class='sidebar-title'>🎙️ AudioInk</div>", unsafe_allow_html=True)
 
-page = st.sidebar.radio("Navigation", ["Upload Audio", "Record Audio", "About"], index=0)
+page = st.sidebar.radio("Navigation", ["Home", "Upload Audio", "Record Audio", "About"], index=0)
 
-if page == "Upload Audio":
+
+if page=="Home":
+    # Custom CSS for enhanced typography and colors
+    st.markdown("""
+    <style>
+        .crazy-title {
+            font-family: 'Impact', sans-serif;
+            color: #FF6B6B;
+            text-align: center;
+            font-size: 3.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+        .crazy-subtitle {
+            font-family: 'Courier New', monospace;
+            color: #4ECDC4;
+            text-align: center;
+            font-size: 1.5em;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .section-header {
+            font-family: 'Arial Black', sans-serif;
+            color: #FF6B6B;
+            font-size: 1.8em;
+            border-bottom: 3px solid #FF6B6B;
+            padding-bottom: 10px;
+            margin-top: 20px;
+        }
+        .emoji-list {
+            font-family: 'Arial', sans-serif;
+            color: #2A9D8F;
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+        .warning-section {
+            background-color: #FFD93D;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .disclaimer {
+            font-family: 'Comic Sans MS', cursive;
+            color: #6A5ACD;
+            font-style: italic;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # Crazy Title
+    st.markdown('<h1 class="crazy-title">🎙️ AudioScribe</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="crazy-subtitle">Where Words Fly Faster Than Your Typing Fingers! 🚀</p>', unsafe_allow_html=True)
+
+    # Imagine This Chaos Section
+    st.markdown('<h2 class="section-header">🤪 Imagine This Chaos...</h2>', unsafe_allow_html=True)
+    st.markdown("""
+    <div class="emoji-list">
+    💬 Talking to yourself in the shower? TRANSCRIBED! <br>
+    🚗 Brilliant ideas while driving? CAPTURED! <br>
+    🌙 3 AM genius thoughts? WE GOT YOU! <br>
+    👻 Conversations with your imaginary friend? DOCUMENTED!
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Madness Explained
+    st.markdown('<h2 class="section-header">The Madness Explained</h2>', unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("""
+        ### 🎤 Record Mode
+        - Just. Start. Talking. 
+        - No judgment zone! 
+        - Speak like nobody's listening
+        - Turn brain's wild stream of consciousness into readable text
+        """)
+    
+    with col2:
+        st.markdown("""
+        ### 📁 Upload Mode
+        - Got an old voice memo? 
+        - Random audio file collecting dust? 
+        - Grandpa's legendary story? 
+        - WE. WILL. DECODE. IT. 🕵️‍♀️
+        """)
+
+    # Warning Section
+    st.markdown('<div class="warning-section">', unsafe_allow_html=True)
+    st.markdown('<h2 class="section-header">🌈 Warning: Side Effects May Include</h2>', unsafe_allow_html=True)
+    st.markdown("""
+    - Sudden bursts of productivity
+    - Uncontrollable feeling of being a tech wizard
+    - Permanent grin from how cool transcription can be
+    - Potential addiction to talking to your devices
+    """)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # Pro Tip
+    st.markdown('<h2 class="section-header">🤯 Pro Tip</h2>', unsafe_allow_html=True)
+    st.markdown("""
+    Our AI doesn't just transcribe. It understands your chaotic brilliance. 
+    Mumble, stutter, use bizarre analogies - we'll turn it into Shakespeare-level prose! 
+    (Okay, maybe not Shakespeare, but definitely coherent text)
+    """)
+
+    # Disclaimer
+    st.markdown('<p class="disclaimer">🎤 SPEAK. WE LISTEN. MAGIC HAPPENS. 🔮</p>', unsafe_allow_html=True)
+    st.markdown('<p class="disclaimer">AudioScribe is not responsible for world-changing ideas or podcaster ambitions!</p>', unsafe_allow_html=True)
+
+elif page == "Upload Audio":
     st.subheader("Upload Audio File")
     uploaded_file = st.file_uploader("Choose an audio file", type=SUPPORTED_FORMATS)
     if uploaded_file:
@@ -115,6 +227,9 @@ elif page == "Record Audio":
 
 elif page == "About":
     st.subheader("About AudioInk")
-    st.write("AudioInk is an AI-powered transcription tool that allows users to record or upload audio and get real-time transcription using Azure Whisper AI. Built using Streamlit, it offers a simple and efficient way to convert speech to text.")
-
+    st.markdown('''
+    :red[ok] :orange[AudioInk is an AI-powered transcription tool that allows users to record or upload audio and get real-time transcription using Azure Whisper AI. Built using Streamlit, it offers a simple and efficient way to convert speech to text.")
+]
+    ''')
+    st.write("
 st.caption("Powered by Azure Whisper AI")
