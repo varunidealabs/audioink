@@ -22,7 +22,7 @@ st.markdown(
         .stButton button { border-radius: 8px; background-color: #007BFF; color: white; }
         .stTabs [data-baseweb="tab-list"] { justify-content: start; }
         .sidebar-title { color: #FF5C0A; font-size: 24px; font-weight: bold; }
-        .top-right-image { position: absolute; top: 10px; right: 10px; }
+        .top-right-image { position: absolute; top: 8px; right: 8px; }
     </style>
     """,
     unsafe_allow_html=True
