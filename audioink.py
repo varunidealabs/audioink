@@ -14,23 +14,52 @@ AudioSegment.ffprobe = which("ffprobe")
 st.set_page_config(page_title="AudioInk", page_icon="🎙️", layout="wide")
 
 # Custom CSS Styling
-st.markdown(
-    """
+st.markdown("""
     <style>
-        .stApp { background-color: #000000; color: #FF5C0A; font-family: 'Times New Roman'; }
-        .sidebar .sidebar-content { background-color: #ffffff; }
-        .stButton button { border-radius: 8px; background-color: #007BFF; color: white; }
-        .stTabs [data-baseweb="tab-list"] { justify-content: start; }
-        .sidebar-title { color: #FF5C0A; font-size: 24px; font-weight: bold; }
-        .top-right-image { position: absolute; top: 8px; right: 8px; }
+        .stApp { 
+            background-color: #f8f8fb; 
+            font-family: 'Inter', sans-serif; 
+        }
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #2c3e50;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .highlight {
+            color: #ff5722;
+        }
+        .subtitle {
+            font-size: 1.5rem;
+            color: #637082;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        .transcribe-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .how-it-works {
+            background-color: #f0f4f8;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
     </style>
-    """,
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
 
 # API Configuration
-AZURE_WHISPER_API_URL = "https://your-api-endpoint.azure.com"
-API_KEY = "your_api_key_here"
+AZURE_WHISPER_API_URL = st.secrets.get("AZURE_WHISPER_API_URL", "https://your-api-endpoint.azure.com")
+API_KEY = st.secrets.get("AZURE_API_KEY", "your_api_key_here")
 SUPPORTED_FORMATS = ["mp3", "mp4", "mpeg", "mpga", "m4a", "wav", "webm"]
 MAX_FILE_SIZE = 25 * 1024 * 1024
 
@@ -76,86 +105,24 @@ def convert_to_wav(audio_file):
         st.error(f"Error converting audio: {str(e)}")
         return None
 
-# Sidebar Layout
-st.sidebar.image("mic.png", width=100)
-st.sidebar.markdown("<div class='sidebar-title'>🎙️ AudioInk</div>", unsafe_allow_html=True)
+# Main App
+def main():
+    # Select page
+    page = st.radio("Navigate", 
+        ["Home", "Transcribe", "How It Works", "FAQ"], 
+        horizontal=True
+    )
 
-page = st.sidebar.radio("Navigation", ["Home", "Upload Audio", "Record Audio", "About"], index=0)
+    if page == "Home":
+        home_page()
+    elif page == "Transcribe":
+        transcribe_page()
+    elif page == "How It Works":
+        how_it_works_page()
+    elif page == "FAQ":
+        faq_page()
 
-
-if page=="Home":
-    # Custom CSS
-    st.markdown("""
-    <style>
-        /* Reset default Streamlit styling */
-        .stApp {
-            background-color: #f8f8fb;
-            font-family: 'Inter', 'Helvetica Neue', sans-serif;
-        }
-        
-        /* Main Container Styling */
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-            text-align: center;
-        }
-        
-        /* Hero Title Styling */
-        .hero-title {
-            font-size: 4.5rem;
-            font-weight: 800;
-            color: #2c3e50;
-            line-height: 1.2;
-            margin-bottom: 1rem;
-        }
-        
-        /* Highlight Word Styling */
-        .highlight {
-            color: #ff5722;
-        }
-        
-        /* Subtitle Styling */
-        .subtitle {
-            font-size: 1.5rem;
-            color: #637082;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-        }
-        
-        /* Button Styling */
-        .cta-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        .cta-buttons a {
-            text-decoration: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .primary-button {
-            background-color: #ff5722;
-            color: white !important;
-        }
-        .secondary-button {
-            background-color: #f0f0f5;
-            color: #2c3e50 !important;
-        }
-        
-        /* Microphone Icon Styling */
-        .microphone-icon {
-            font-size: 5rem;
-            color: #ff5722;
-            margin-top: 2rem;
-        }
-    </style>
-    """, unsafe_allow_html=True)
-
-    # Main Container
+def home_page():
     st.markdown('<div class="main-container">', unsafe_allow_html=True)
     
     # Hero Title
@@ -169,76 +136,104 @@ if page=="Home":
     # Subtitle
     st.markdown('''
     <p class="subtitle">
-    AudioScribe converts voice notes into text that's easy to read and ready to share.
+    AudioInk converts voice notes into text that's easy to read and ready to share.
     Create meeting notes, memos, emails, articles and more. 
     All you have to do is talk.
     </p>
     ''', unsafe_allow_html=True)
     
     # CTA Buttons
-    st.markdown('''
-    <div class="cta-buttons">
-        <a href="#" class="cta-buttons a primary-button">Start Transcribing</a>
-        <a href="#" class="cta-buttons a secondary-button">See How It Works</a>
-    </div>
-    ''', unsafe_allow_html=True)
-    
-    # Microphone Icon
-    st.markdown('<div class="microphone-icon text-center">🎤</div>', unsafe_allow_html=True)
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown(
+            '<a href="#" class="primary-button" style="display:block; text-align:center; padding:12px; background-color:#ff5722; color:white; text-decoration:none; border-radius:50px;">Start Transcribing</a>', 
+            unsafe_allow_html=True
+        )
+    with col2:
+        st.markdown(
+            '<a href="#" class="secondary-button" style="display:block; text-align:center; padding:12px; background-color:#f0f0f5; color:#2c3e50; text-decoration:none; border-radius:50px;">See How It Works</a>', 
+            unsafe_allow_html=True
+        )
     
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # Adding functionality to the buttons
-    col1, col2 = st.columns([1,1])
-    with col1:
-        if st.button("Start Transcribing", use_container_width=True):
-            st.switch_page("pages/transcribe.py")
+def transcribe_page():
+    st.markdown('<div class="transcribe-container">', unsafe_allow_html=True)
+    st.header("Transcribe Your Audio")
     
-    with col2:
-        if st.button("How It Works", use_container_width=True):
-            st.info("""
-            AudioScribe makes transcription super easy:
-            1. Click 'Start Transcribing'
-            2. Either upload an audio file or record directly
-            3. Our AI instantly converts your audio to text
-            4. Edit, copy, or save your transcription
-            """)
-
-elif page == "Upload Audio":
-    st.subheader("Upload Audio File")
-    uploaded_file = st.file_uploader("Choose an audio file", type=SUPPORTED_FORMATS)
-    if uploaded_file:
-        valid, message = validate_file(uploaded_file)
-        if not valid:
-            st.error(message)
-        elif st.button("Transcribe Uploaded Audio"):
-            processed_file = convert_to_wav(uploaded_file)
-            if processed_file:
-                success, result = transcribe_audio(processed_file)
+    # Tabs for different input methods
+    tab1, tab2 = st.tabs(["Upload Audio", "Record Audio"])
+    
+    with tab1:
+        st.subheader("Upload Audio File")
+        uploaded_file = st.file_uploader("Choose an audio file", type=SUPPORTED_FORMATS)
+        if uploaded_file:
+            valid, message = validate_file(uploaded_file)
+            if not valid:
+                st.error(message)
+            elif st.button("Transcribe Uploaded Audio"):
+                processed_file = convert_to_wav(uploaded_file)
+                if processed_file:
+                    success, result = transcribe_audio(processed_file)
+                    if success:
+                        st.subheader("Transcription")
+                        st.write(result)
+                    else:
+                        st.error(result)
+    
+    with tab2:
+        st.subheader("Record Audio")
+        audio_data = st.audio_input("Record your audio")
+        if audio_data:
+            st.success("Audio recorded successfully!")
+            if st.button("Transcribe Recorded Audio"):
+                audio_data.seek(0)
+                success, result = transcribe_audio(audio_data)
                 if success:
                     st.subheader("Transcription")
                     st.write(result)
                 else:
                     st.error(result)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
-elif page == "Record Audio":
-    st.subheader("Record Audio")
-    audio_data = st.audio_input("Record your audio")
-    if audio_data:
-        st.success("Audio recorded successfully!")
-        if st.button("Transcribe Recorded Audio"):
-            audio_data.seek(0)
-            success, result = transcribe_audio(audio_data)
-            if success:
-                st.subheader("Transcription")
-                st.write(result)
-            else:
-                st.error(result)
+def how_it_works_page():
+    st.markdown('<div class="how-it-works">', unsafe_allow_html=True)
+    st.header("How AudioInk Works")
+    
+    # Steps explanation
+    steps = [
+        "Choose your input method: Upload or Record",
+        "Select your audio file or record audio",
+        "Click 'Transcribe'",
+        "Get instant, accurate text transcription"
+    ]
+    
+    for i, step in enumerate(steps, 1):
+        st.markdown(f"""
+        <div style="display:flex; align-items:center; margin-bottom:1rem;">
+            <div style="background-color:#ff5722; color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-right:1rem;">
+                {i}
+            </div>
+            <span style="font-size:1.1rem;">{step}</span>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
-elif page == "About":
-    st.subheader("About AudioInk")
-    st.markdown('''
-    :red[AudioInk is an AI-powered transcription tool that allows users to record or upload audio and get real-time transcription using Azure Whisper AI. 
-    Built using Streamlit, it offers a simple and efficient way to convert speech to text.]
-    ''')
-st.caption("Powered by Azure Whisper AI")
+def faq_page():
+    st.header("Frequently Asked Questions")
+    
+    faqs = [
+        ("What audio formats are supported?", "We support MP3, MP4, WAV, M4A, and more."),
+        ("Is there a file size limit?", "Yes, the maximum file size is 25MB."),
+        ("How accurate is the transcription?", "Our AI-powered transcription is highly accurate."),
+        ("Is my audio data secure?", "Yes, we use secure, encrypted processing.")
+    ]
+    
+    for question, answer in faqs:
+        with st.expander(question):
+            st.write(answer)
+
+if __name__ == "__main__":
+    main()
