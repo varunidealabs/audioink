@@ -158,135 +158,57 @@ def home_page():
     st.markdown('</div>', unsafe_allow_html=True)
 
 def transcribe_page():
-    # Add custom CSS for the new design
-    st.markdown("""
-    <style>
-    .transcribe-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-bottom: 20px;
-    }
-    .transcribe-method-btn {
-        padding: 12px 24px;
-        border: 2px solid #e0e4eb;
-        border-radius: 10px;
-        background-color: #f8f9fa;
-        color: #2c3e50;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-align: center;
-        min-width: 200px;
-        font-weight: bold;
-    }
-    .transcribe-method-btn:hover {
-        background-color: #ff5722;
-        color: white;
-        border-color: #ff5722;
-    }
-    .transcribe-method-btn.active {
-        background-color: #ff5722;
-        color: white;
-        border-color: #ff5722;
-    }
-    .transcribe-content {
-        margin-top: 20px;
-        text-align: center;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    # Custom JavaScript for button interactions
-    st.markdown("""
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const uploadBtn = document.getElementById('upload-method-btn');
-        const recordBtn = document.getElementById('record-method-btn');
-        const uploadContent = document.getElementById('upload-content');
-        const recordContent = document.getElementById('record-content');
-        
-        uploadBtn.addEventListener('click', function() {
-            uploadBtn.classList.add('active');
-            recordBtn.classList.remove('active');
-            uploadContent.style.display = 'block';
-            recordContent.style.display = 'none';
-        });
-        
-        recordBtn.addEventListener('click', function() {
-            recordBtn.classList.add('active');
-            uploadBtn.classList.remove('active');
-            recordContent.style.display = 'block';
-            uploadContent.style.display = 'none';
-        });
-    });
-    </script>
-    """, unsafe_allow_html=True)
-
     st.markdown('<div class="transcribe-container">', unsafe_allow_html=True)
     st.header("🎙️ Transcribe Your Audio")
     
-    # Method Selection Buttons
-    st.markdown('''
-    <div class="transcribe-buttons">
-        <div id="upload-method-btn" class="transcribe-method-btn active">
-            Upload Audio
-        </div>
-        <div id="record-method-btn" class="transcribe-method-btn">
-            Record Audio
-        </div>
-    </div>
-    ''', unsafe_allow_html=True)
+    # Tabs for different input methods
+    tab1, tab2 = st.tabs(["Upload Audio", "Record Audio"])
     
-    # Upload Audio Content
-    st.markdown('<div id="upload-content" class="transcribe-content">', unsafe_allow_html=True)
+    transcription_text = None  # Store the transcribed text
     
-    uploaded_file = st.file_uploader("Choose an audio file", type=SUPPORTED_FORMATS)
-    transcription_text = None
-    
-    if uploaded_file:
-        valid, message = validate_file(uploaded_file)
-        if not valid:
-            st.error(message)
-        elif st.button("⚡ Transcribe Uploaded Audio"):
-            processed_file = convert_to_wav(uploaded_file)
-            if processed_file:
-                success, result = transcribe_audio(processed_file)
+    with tab1:
+        st.subheader(" Upload Audio File")
+        uploaded_file = st.file_uploader("Choose an audio file", type=SUPPORTED_FORMATS)
+        
+        if uploaded_file:
+            valid, message = validate_file(uploaded_file)
+            if not valid:
+                st.error(message)
+            elif st.button("⚡ Transcribe Uploaded Audio"):
+                processed_file = convert_to_wav(uploaded_file)
+                if processed_file:
+                    success, result = transcribe_audio(processed_file)
+                    if success:
+                        transcription_text = result
+                        st.subheader(" Transcription Result")
+                        st.write(transcription_text)
+                    else:
+                        st.error(result)
+
+    with tab2:
+        st.subheader("🎤 Record Audio")
+        audio_data = st.audio_input("Record your audio")
+        
+        if audio_data:
+            st.success("🎙️ Audio recorded successfully!")
+            if st.button(" Transcribe Recorded Audio"):
+                audio_data.seek(0)
+                success, result = transcribe_audio(audio_data)
                 if success:
                     transcription_text = result
-                    st.subheader("Transcription Result")
+                    st.subheader(" Transcription Result")
                     st.write(transcription_text)
                 else:
                     st.error(result)
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # Record Audio Content
-    st.markdown('<div id="record-content" class="transcribe-content" style="display:none;">', unsafe_allow_html=True)
-    
-    audio_data = st.audio_input("Record your audio")
-    
-    if audio_data:
-        st.success("🎙️ Audio recorded successfully!")
-        if st.button("⚡ Transcribe Recorded Audio"):
-            audio_data.seek(0)
-            success, result = transcribe_audio(audio_data)
-            if success:
-                transcription_text = result
-                st.subheader("Transcription Result")
-                st.write(transcription_text)
-            else:
-                st.error(result)
-    st.markdown('</div>', unsafe_allow_html=True)
 
-    # Download Button
+    # **Enable Download Button Only if Transcription is Available**
     if transcription_text:
         txt_filename = "transcription.txt"
         txt_bytes = BytesIO(transcription_text.encode("utf-8"))
-        st.download_button(
-            label="⬇️ Download as TXT",
-            data=txt_bytes,
-            file_name=txt_filename,
-            mime="text/plain"
-        )
+        st.download_button(label="⬇️ Download as TXT",
+                           data=txt_bytes,
+                           file_name=txt_filename,
+                           mime="text/plain")
     
     st.markdown('</div>', unsafe_allow_html=True)
 
