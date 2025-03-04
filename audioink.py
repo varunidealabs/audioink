@@ -159,51 +159,59 @@ def home_page():
 
 def transcribe_page():
     st.markdown('<div class="transcribe-container">', unsafe_allow_html=True)
-    st.header("Transcribe Your Audio")
+    st.header("🎙️ Transcribe Your Audio")
     
     # Tabs for different input methods
     tab1, tab2 = st.tabs(["Upload Audio", "Record Audio"])
     
+    transcription_text = None  # Store the transcribed text
+    
     with tab1:
-        st.subheader("Upload Audio File")
+        st.subheader(" Upload Audio File")
         uploaded_file = st.file_uploader("Choose an audio file", type=SUPPORTED_FORMATS)
+        
         if uploaded_file:
             valid, message = validate_file(uploaded_file)
             if not valid:
                 st.error(message)
-            elif st.button("Transcribe Uploaded Audio"):
+            elif st.button("⚡ Transcribe Uploaded Audio"):
                 processed_file = convert_to_wav(uploaded_file)
                 if processed_file:
                     success, result = transcribe_audio(processed_file)
                     if success:
-                        st.subheader("Transcription")
-                        st.write(result)
+                        transcription_text = result
+                        st.subheader(" Transcription Result")
+                        st.write(transcription_text)
                     else:
                         st.error(result)
-    
+
     with tab2:
-        st.subheader("Record Audio")
+        st.subheader("🎤 Record Audio")
         audio_data = st.audio_input("Record your audio")
+        
         if audio_data:
-            st.success("Audio recorded successfully!")
-            if st.button("Transcribe Recorded Audio"):
+            st.success("🎙️ Audio recorded successfully!")
+            if st.button(" Transcribe Recorded Audio"):
                 audio_data.seek(0)
                 success, result = transcribe_audio(audio_data)
                 if success:
-                    st.subheader("Transcription")
-                    st.write(result)
+                    transcription_text = result
+                    st.subheader(" Transcription Result")
+                    st.write(transcription_text)
                 else:
-                    st.error(result)          
-    
-    # **Download as a TXT File**
-    txt_filename = f"{os.path.splitext(uploaded_file.name)[0]}.txt"
-    txt_bytes = BytesIO(result.encode("utf-8"))
-    st.download_button(label="⬇️ Download as TXT",
-                       data=txt_bytes,
-                       file_name=txt_filename,
-                       mime="text/plain")
+                    st.error(result)
+
+    # **Enable Download Button Only if Transcription is Available**
+    if transcription_text:
+        txt_filename = "transcription.txt"
+        txt_bytes = BytesIO(transcription_text.encode("utf-8"))
+        st.download_button(label="⬇️ Download as TXT",
+                           data=txt_bytes,
+                           file_name=txt_filename,
+                           mime="text/plain")
     
     st.markdown('</div>', unsafe_allow_html=True)
+
 
 def how_it_works_page():
     st.markdown('<div class="how-it-works">', unsafe_allow_html=True)
