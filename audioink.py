@@ -193,8 +193,17 @@ def transcribe_page():
                     st.subheader("Transcription")
                     st.write(result)
                 else:
-                    st.error(result)
+                    st.error(result)          
     
+    # **Download as a TXT File**
+    txt_filename = f"{os.path.splitext(uploaded_file.name)[0]}.txt"
+    txt_bytes = BytesIO(result.encode("utf-8"))
+    st.download_button(label="⬇️ Download as TXT",
+                       data=txt_bytes,
+                       file_name=txt_filename,
+                       mime="text/plain")
+            else:
+                st.error(result)
     st.markdown('</div>', unsafe_allow_html=True)
 
 def how_it_works_page():
