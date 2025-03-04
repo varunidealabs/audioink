@@ -20,6 +20,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+#Set FFmpeg path manually
+AudioSegment.converter = "/usr/bin/ffmpeg"
+AudioSegment.ffmpeg = "/usr/bin/ffmpeg"
+AudioSegment.ffprobe = "/usr/bin/ffprobe"
+
 # Load API credentials from Streamlit Secrets
 AZURE_WHISPER_API_URL = st.secrets["AZURE_WHISPER_API_URL"]
 API_KEY = st.secrets["AZURE_API_KEY"]
