@@ -135,16 +135,13 @@ if page=="Home":
 
     # Crazy Title
     st.markdown('<h1 class="crazy-title">🎙️ AudioScribe</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="crazy-subtitle">Where Words Fly Faster Than Your Typing Fingers! 🚀</p>', unsafe_allow_html=True)
+    st.markdown('<p class="crazy-subtitle">No more typing, no more lost ideas. Just talk, and boom </p>', unsafe_allow_html=True)
 
     # Imagine This Chaos Section
     st.markdown('<h2 class="section-header">🤪 Imagine This Chaos...</h2>', unsafe_allow_html=True)
     st.markdown("""
     <div class="emoji-list">
-    💬 Talking to yourself in the shower? TRANSCRIBED! <br>
-    🚗 Brilliant ideas while driving? CAPTURED! <br>
-    🌙 3 AM genius thoughts? WE GOT YOU! <br>
-    👻 Conversations with your imaginary friend? DOCUMENTED!
+    AudioPen converts voice notes into text that's easy to read and ready to share. 
     </div>
     """, unsafe_allow_html=True)
 
@@ -228,7 +225,8 @@ elif page == "Record Audio":
 elif page == "About":
     st.subheader("About AudioInk")
     st.markdown('''
-    :red[ok] :orange[AudioInk is an AI-powered transcription tool that allows users to record or upload audio and get real-time transcription using Azure Whisper AI. Built using Streamlit, it offers a simple and efficient way to convert speech to text.")
+    red[AudioInk is an AI-powered transcription tool that allows users to record or upload audio and get real-time transcription using Azure Whisper AI. 
+    Built using Streamlit, it offers a simple and efficient way to convert speech to text.
 ]
     ''')
 st.caption("Powered by Azure Whisper AI")
