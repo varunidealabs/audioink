@@ -124,19 +124,19 @@ def main():
 
 def home_page():
     st.markdown('<div class="main-container">', unsafe_allow_html=True)
-    
+
     # Hero Title
     st.markdown('''
     <h1 class="hero-title">
-        Go from <span class="highlight">fuzzy thought</span><br>
-        to clear text. <span class="highlight">Fast.</span>
+        Say it loud, <span class="highlight">let words flow,</span><br>
+        Upload with ease, <span class="highlight">G watch text grow.</span>
     </h1>
     ''', unsafe_allow_html=True)
     
     # Subtitle
     st.markdown('''
     <p class="subtitle">
-    AudioInk converts voice notes into text that's easy to read and ready to share.
+    AudioInk transforms your voice into clear, shareable text.
     Create meeting notes, memos, emails, articles and more. 
     All you have to do is talk.
     </p>
@@ -151,7 +151,7 @@ def home_page():
         )
     with col2:
         st.markdown(
-            '<a href="#" class="secondary-button" style="display:block; text-align:center; padding:12px; background-color:#f0f0f5; color:#2c3e50; text-decoration:none; border-radius:50px;">See How It Works</a>', 
+            '<a href="#" class="secondary-button" style="display:block; text-align:center; padding:12px; background-color:#ff5722; color:#2c3e50; text-decoration:none; border-radius:50px;">Live audio and upload file</a>', 
             unsafe_allow_html=True
         )
     
@@ -226,14 +226,23 @@ def faq_page():
     
     faqs = [
         ("What audio formats are supported?", "We support MP3, MP4, WAV, M4A, and more."),
-        ("Is there a file size limit?", "Yes, the maximum file size is 25MB."),
-        ("How accurate is the transcription?", "Our AI-powered transcription is highly accurate."),
-        ("Is my audio data secure?", "Yes, we use secure, encrypted processing.")
+        
+        (" What types of audio files can I upload?", "We support **MP3, MP4, WAV, M4A, WEBM, and more.** If your format isn’t listed, try converting it to a supported type."),
+        (" Is there a file size limit?", "Yes, you can upload files up to **25MB**, which is about **5 minutes of high-quality audio.**"),
+        (" How fast is the transcription?", "Our AI delivers transcriptions in **seconds**, so you get your text **faster than you can type!**"),
+        (" How accurate is the transcription?", "We use **cutting-edge AI** to provide highly accurate transcriptions. Clear audio means even **better results!**"),
+        (" Can I record live audio instead of uploading a file?", "Yes! Use our **built-in recorder** to capture and transcribe audio instantly—no uploads needed."),
+        (" Is my data private and secure?", "Absolutely. **Your audio is encrypted**, processed securely, and never stored permanently."),
+        (" Do I need to install anything?", "No downloads, no installs—**just open your browser and start transcribing.**")
     ]
     
     for question, answer in faqs:
         with st.expander(question):
             st.write(answer)
+    st.markdown("---")
+    st.subheader("Have more questions?")
+    st.write("If you need further assistance, feel free to reach out:")
+    st.markdown(" **Email:** [varun@idealabs.fyi](mailto:varun@idealabs.fyi)")        
 
 if __name__ == "__main__":
     main()
