@@ -275,6 +275,7 @@ def how_it_works_page():
     st.markdown('</div>', unsafe_allow_html=True)
 
 def faq_page():
+    st.markdown('<div id="faq"></div>', unsafe_allow_html=True)  # Add an anchor for scrolling
     st.header("Frequently Asked Questions")
     
     faqs = [
