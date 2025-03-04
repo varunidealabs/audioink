@@ -13,7 +13,7 @@ AudioSegment.ffprobe = which("ffprobe")
 # Page Config
 st.set_page_config(page_title="AudioInk", page_icon="🎙️", layout="wide")
 
-# Custom CSS Styling
+# Updated CSS Styling
 st.markdown("""
     <style>
         .stApp { 
@@ -29,16 +29,16 @@ st.markdown("""
         .hero-title {
             font-size: 3.5rem;
             font-weight: 800;
-            color: #2c3e50;
+            color: #1a2b3c; /* Darker blue-black for better contrast */
             line-height: 1.2;
             margin-bottom: 1rem;
         }
         .highlight {
-            color: #ff5722;
+            color: #ff5722; /* Kept the original orange accent */
         }
         .subtitle {
             font-size: 1.5rem;
-            color: #637082;
+            color: #2c3e50; /* Darker text color for better readability */
             max-width: 700px;
             margin: 0 auto 2rem;
         }
@@ -53,6 +53,29 @@ st.markdown("""
             border-radius: 15px;
             padding: 1.5rem;
             margin-top: 1rem;
+        }
+        /* New button styles */
+        .cta-button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 0 10px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .primary-button {
+            background-color: #ff5722;
+            color: white;
+        }
+        .secondary-button {
+            background-color: #e0e4eb;
+            color: #2c3e50;
+            border: 1px solid #c0c6d0;
+        }
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
     </style>
 """, unsafe_allow_html=True)
@@ -143,17 +166,16 @@ def home_page():
     ''', unsafe_allow_html=True)
     
     # CTA Buttons
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown(
-            '<a href="#" class="primary-button" style="display:block; text-align:center; padding:12px; background-color:#ff5722; color:white; text-decoration:none; border-radius:50px;">Start Transcribing</a>', 
-            unsafe_allow_html=True
-        )
-    with col2:
-        st.markdown(
-            '<a href="#" class="secondary-button" style="display:block; text-align:center; padding:12px; background-color:#f0f0f5; color:#2c3e50; text-decoration:none; border-radius:50px;">See How It Works</a>', 
-            unsafe_allow_html=True
-        )
+    st.markdown('''
+    <div style="display: flex; justify-content: center; gap: 20px;">
+        <a href="#transcribe" class="cta-button primary-button" onclick="window.location.href='#transcribe'">
+            Start Transcribing
+        </a>
+        <a href="#how-it-works" class="cta-button secondary-button" onclick="window.location.href='#how-it-works'">
+            See How It Works
+        </a>
+    </div>
+    ''', unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)
 
