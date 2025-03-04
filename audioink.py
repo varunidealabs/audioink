@@ -154,6 +154,8 @@ def home_page():
             '<a href="#" class="secondary-button" style="display:block; text-align:center; padding:12px; background-color:#ff5722; color:white; text-decoration:none; border-radius:50px;">Live audio and upload file</a>', 
             unsafe_allow_html=True
         )
+
+    st.caption("AudioInk built by IdeaLabs")
     
     st.markdown('</div>', unsafe_allow_html=True)
 
