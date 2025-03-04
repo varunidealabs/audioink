@@ -128,8 +128,8 @@ def home_page():
     # Hero Title
     st.markdown('''
     <h1 class="hero-title">
-        Say it loud, <span class="highlight">let words flow,</span><br>
-        Upload with ease, <span class="highlight">G watch text grow.</span>
+        Say it loud <span class="highlight">let words flow,</span><br>
+        Upload with ease <span class="highlight">watch text grow.</span>
     </h1>
     ''', unsafe_allow_html=True)
     
@@ -151,7 +151,7 @@ def home_page():
         )
     with col2:
         st.markdown(
-            '<a href="#" class="secondary-button" style="display:block; text-align:center; padding:12px; background-color:#ff5722; color:#2c3e50; text-decoration:none; border-radius:50px;">Live audio and upload file</a>', 
+            '<a href="#" class="secondary-button" style="display:block; text-align:center; padding:12px; background-color:#ff5722; color:white; text-decoration:none; border-radius:50px;">Live audio and upload file</a>', 
             unsafe_allow_html=True
         )
     
@@ -242,7 +242,7 @@ def faq_page():
     st.markdown("---")
     st.subheader("Have more questions?")
     st.write("If you need further assistance, feel free to reach out:")
-    st.markdown(" **Email:** [varun@idealabs.fyi](mailto:varun@idealabs.fyi)")        
+    st.markdown(" **Email:** [a@idealabs.fyi](mailto:a@idealabs.fyi)")        
 
 if __name__ == "__main__":
     main()
