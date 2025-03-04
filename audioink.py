@@ -17,10 +17,12 @@ st.set_page_config(page_title="AudioInk", page_icon="🎙️", layout="wide")
 st.markdown(
     """
     <style>
-        .stApp { background-color: #1e293b; color: #ffffff; }
-        .sidebar .sidebar-content { background-color: #334155; }
+        .stApp { background-color: #ffffff; color: #000000; font-family: 'Times New Roman'; }
+        .sidebar .sidebar-content { background-color: #ffffff; }
         .stButton button { border-radius: 8px; background-color: #007BFF; color: white; }
         .stTabs [data-baseweb="tab-list"] { justify-content: start; }
+        .sidebar-title { color: #FF5C0A; font-size: 24px; font-weight: bold; }
+        .top-right-image { position: absolute; top: 10px; right: 10px; }
     </style>
     """,
     unsafe_allow_html=True
@@ -75,8 +77,8 @@ def convert_to_wav(audio_file):
         return None
 
 # Sidebar Layout
-st.sidebar.image("https://static.streamlit.io/examples/cat.jpg", width=100)
-st.sidebar.title("🎙️ AudioInk")
+st.sidebar.image("mic.png", width=100)
+st.sidebar.markdown("<div class='sidebar-title'>🎙️ AudioInk</div>", unsafe_allow_html=True)
 
 page = st.sidebar.radio("Navigation", ["Upload Audio", "Record Audio", "About"], index=0)
 
