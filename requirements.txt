@@ -3,4 +3,4 @@ requests
 pydub
 sounddevice
 scipy
-python-dotenv
+numpy
