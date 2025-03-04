@@ -188,7 +188,7 @@ def add_footer():
     st.markdown("""
     <div class="footer">
         AudioInk™ built by <a href="https://idealabs.fyi" target="_blank">Ideal Labs</a> | 
-        <a href="#faq">FAQs</a> | 
+        <a onclick="window.location.href='#faq'">FAQs</a> | 
         <a href="#privacy-policy">Privacy Policy</a> | 
         <a href="#terms-of-use">Terms of Use</a>
     </div>
