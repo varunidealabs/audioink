@@ -1,6 +1,5 @@
 import streamlit as st
 import requests
-import time
 import os
 from io import BytesIO
 from pydub import AudioSegment
@@ -18,10 +17,10 @@ st.set_page_config(page_title="AudioInk", page_icon="🎙️", layout="wide")
 st.markdown(
     """
     <style>
-        .stApp { background-color: #f5f7fa; }
-        .main-container { text-align: center; }
-        .stTabs [data-baseweb="tab-list"] { justify-content: center; }
+        .stApp { background-color: #1e293b; color: #ffffff; }
+        .sidebar .sidebar-content { background-color: #334155; }
         .stButton button { border-radius: 8px; background-color: #007BFF; color: white; }
+        .stTabs [data-baseweb="tab-list"] { justify-content: start; }
     </style>
     """,
     unsafe_allow_html=True
@@ -75,14 +74,13 @@ def convert_to_wav(audio_file):
         st.error(f"Error converting audio: {str(e)}")
         return None
 
-# UI Layout
-st.markdown("<h1 style='text-align: center;'>🎙️ AudioInk: AI-Powered Transcription</h1>", unsafe_allow_html=True)
-st.write("Record or upload audio and get real-time transcription powered by Azure Whisper AI.")
+# Sidebar Layout
+st.sidebar.image("https://static.streamlit.io/examples/cat.jpg", width=100)
+st.sidebar.title("🎙️ AudioInk")
 
-# Tabs for Audio Upload & Recording
-tab1, tab2 = st.tabs(["Upload Audio", "Record Audio"])
+page = st.sidebar.radio("Navigation", ["Upload Audio", "Record Audio", "About"], index=0)
 
-with tab1:
+if page == "Upload Audio":
     st.subheader("Upload Audio File")
     uploaded_file = st.file_uploader("Choose an audio file", type=SUPPORTED_FORMATS)
     if uploaded_file:
@@ -99,7 +97,7 @@ with tab1:
                 else:
                     st.error(result)
 
-with tab2:
+elif page == "Record Audio":
     st.subheader("Record Audio")
     audio_data = st.audio_input("Record your audio")
     if audio_data:
@@ -112,5 +110,9 @@ with tab2:
                 st.write(result)
             else:
                 st.error(result)
+
+elif page == "About":
+    st.subheader("About AudioInk")
+    st.write("AudioInk is an AI-powered transcription tool that allows users to record or upload audio and get real-time transcription using Azure Whisper AI. Built using Streamlit, it offers a simple and efficient way to convert speech to text.")
 
 st.caption("Powered by Azure Whisper AI")
