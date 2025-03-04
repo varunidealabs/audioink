@@ -121,6 +121,8 @@ def main():
         how_it_works_page()
     elif page == "FAQ":
         faq_page()
+        
+    add_footer()    
 
 def home_page():
     st.markdown('<div class="main-container">', unsafe_allow_html=True)
@@ -154,10 +156,43 @@ def home_page():
             '<a href="#" class="secondary-button" style="display:block; text-align:center; padding:12px; background-color:#ff5722; color:white; text-decoration:none; border-radius:50px;">Live audio and upload file</a>', 
             unsafe_allow_html=True
         )
-
-    st.caption("AudioInk built by IdeaLabs")
     
     st.markdown('</div>', unsafe_allow_html=True)
+
+def add_footer():
+    st.markdown("""
+    <style>
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: #f8f8fb;
+        color: #637082;
+        text-align: center;
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    .footer a {
+        color: #2c3e50;
+        text-decoration: none;
+        margin: 0 10px;
+        transition: color 0.3s ease;
+    }
+    .footer a:hover {
+        color: #ff5722;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class="footer">
+        AudioInk™ built by <a href="https://idealabs.fyi" target="_blank">Ideal Labs</a> | 
+        <a href="#faq">FAQs</a> | 
+        <a href="#privacy-policy">Privacy Policy</a> | 
+        <a href="#terms-of-use">Terms of Use</a>
+    </div>
+    """, unsafe_allow_html=True)
 
 def transcribe_page():
     st.markdown('<div class="transcribe-container">', unsafe_allow_html=True)
