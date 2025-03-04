@@ -17,7 +17,7 @@ st.set_page_config(page_title="AudioInk", page_icon="🎙️", layout="wide")
 st.markdown(
     """
     <style>
-        .stApp { background-color: #ffffff; color: #000000; font-family: 'Times New Roman'; }
+        .stApp { background-color: #ffffff; color: #FF5C0A; font-family: 'Times New Roman'; }
         .sidebar .sidebar-content { background-color: #ffffff; }
         .stButton button { border-radius: 8px; background-color: #007BFF; color: white; }
         .stTabs [data-baseweb="tab-list"] { justify-content: start; }
