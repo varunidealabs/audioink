@@ -55,19 +55,13 @@ def validate_file(file):
         return False, "Unsupported file format."
     return True, "File is valid"
 
-# Record audio and save as WAV
-def record_audio(duration=5, sample_rate=16000):
-    try:
-        st.write("Recording...")
-        recording = sd.rec(int(duration * sample_rate), samplerate=sample_rate, channels=1)
-        time.sleep(duration)
-        sd.wait()
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
-            write(temp_file.name, sample_rate, recording)
-            return temp_file.name
-    except Exception as e:
-        st.error(f"Error: {str(e)}")
-        return None
+# Record audio
+def record_audio():
+    audio_data = st.audio_input("Record your audio")
+    if audio_data is not None:
+        return audio_data
+    return None
+
 
 # Convert audio to WAV format
 def convert_to_wav(audio_file):
