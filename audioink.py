@@ -189,7 +189,7 @@ def add_footer():
     
     st.markdown("""
     <div class="footer">
-        AudioInk™ built by <a href="https://idealabs.fyi" target="_blank">Ideal Labs</a> | FAQs| 
+        AudioInk™ built by <a href="https://idealabs.fyi" target="_blank">Ideal Labs</a> | FAQs  | 
         <a href="#privacy-policy">Privacy Policy</a> | 
         <a href="#terms-of-use">Terms of Use</a>
     </div>
