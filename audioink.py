@@ -202,8 +202,7 @@ def transcribe_page():
                        data=txt_bytes,
                        file_name=txt_filename,
                        mime="text/plain")
-            else:
-                st.error(result)
+    
     st.markdown('</div>', unsafe_allow_html=True)
 
 def how_it_works_page():
