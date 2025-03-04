@@ -189,8 +189,7 @@ def add_footer():
     
     st.markdown("""
     <div class="footer">
-        AudioInk™ built by <a href="https://idealabs.fyi" target="_blank">Ideal Labs</a> | 
-        <a onclick="window.location.href='#faq'">FAQs</a> | 
+        AudioInk™ built by <a href="https://idealabs.fyi" target="_blank">Ideal Labs</a> | FAQs| 
         <a href="#privacy-policy">Privacy Policy</a> | 
         <a href="#terms-of-use">Terms of Use</a>
     </div>
@@ -278,8 +277,6 @@ def how_it_works_page():
     st.markdown('</div>', unsafe_allow_html=True)
 
 def faq_page():
-    # Add an anchor for scrolling
-    st.markdown('<div id="faq"></div>', unsafe_allow_html=True)
     
     st.header("Frequently Asked Questions")
     
