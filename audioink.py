@@ -231,5 +231,4 @@ elif page == "About":
     :red[ok] :orange[AudioInk is an AI-powered transcription tool that allows users to record or upload audio and get real-time transcription using Azure Whisper AI. Built using Streamlit, it offers a simple and efficient way to convert speech to text.")
 ]
     ''')
-    st.write("
 st.caption("Powered by Azure Whisper AI")
