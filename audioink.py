@@ -225,8 +225,6 @@ def faq_page():
     st.header("Frequently Asked Questions")
     
     faqs = [
-        ("What audio formats are supported?", "We support MP3, MP4, WAV, M4A, and more."),
-        
         (" What types of audio files can I upload?", "We support **MP3, MP4, WAV, M4A, WEBM, and more.** If your format isn’t listed, try converting it to a supported type."),
         (" Is there a file size limit?", "Yes, you can upload files up to **25MB**, which is about **5 minutes of high-quality audio.**"),
         (" How fast is the transcription?", "Our AI delivers transcriptions in **seconds**, so you get your text **faster than you can type!**"),
