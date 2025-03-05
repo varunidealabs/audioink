@@ -86,6 +86,18 @@ def local_css():
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        @keyframes wave1 {
+            0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+            50% { transform: translateX(10%) translateY(-10%) rotate(180deg); }
+        }
+        @keyframes wave2 {
+            0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+            50% { transform: translateX(-10%) translateY(10%) rotate(-180deg); }
+        }
+        @keyframes wave3 {
+            0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+            50% { transform: translateX(5%) translateY(-5%) rotate(90deg); }
+        }
         
         .hero-title {
             font-size: 3.5rem;
