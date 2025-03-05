@@ -184,7 +184,7 @@ def main():
             <div class="water-wave2"></div>
             <div class="water-wave3"></div>
         </div>
-        <div class="app-title">AUDIOINK</div>
+        <div class="app-title">AUDIO INK</div>
     </div>
     ''', unsafe_allow_html=True)
     
