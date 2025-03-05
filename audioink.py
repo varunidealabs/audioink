@@ -170,7 +170,7 @@ def convert_to_wav(audio_file):
         return None
 
 def main():
-    col1, col2 = st.columns([1, 3])
+    col1, col2 = st.columns([1, 5])
     with col1:
         # Hero Title
         st.markdown('''
