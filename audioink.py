@@ -66,7 +66,8 @@ def local_css():
             width: 200%;
             height: 200%;
             border-radius: 35%;
-            animation: wave2 7s linear infinite;
+            animation: inherit;
+            animation-duration: 5s;
         }
         .water-wave3 {
             position: absolute;
