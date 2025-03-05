@@ -4,6 +4,7 @@ import os
 from io import BytesIO
 from pydub import AudioSegment
 from pydub.utils import which
+from PIL import Image
 
 # Set FFmpeg paths automatically
 AudioSegment.converter = which("ffmpeg")
