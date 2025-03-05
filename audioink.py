@@ -114,9 +114,14 @@ def convert_to_wav(audio_file):
         return None
 
 def main():
-    # If you have a local image file
-    img = Image.open('mic.png').resize((120, 120))
-    st.markdown('<div class="main-container">', unsafe_allow_html=True)
+        # Check if the image file exists
+    if not os.path.exists("mic.png"):
+        st.error("Error: 'mic.png' not found! Please check the file path.")
+        return
+
+    # Load and display the image
+    img = Image.open("mic.png").resize((120, 120))
+    st.image(img, caption="Microphone", use_column_width=False)
 
     # Hero Title
     st.markdown('''
