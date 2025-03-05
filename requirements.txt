@@ -2,4 +2,3 @@ streamlit
 requests
 pydub
 ffmpeg-python
-pillow
