@@ -170,6 +170,8 @@ def convert_to_wav(audio_file):
 
 def main():
 
+    st.write("AudioInk")
+
     # Add Water Wave Animation Instead of Mic Image
     st.markdown('''
     <div class="water-round-container">
