@@ -14,11 +14,11 @@ AudioSegment.ffprobe = which("ffprobe")
 # Page Config
 st.set_page_config(page_title="AudioInk", page_icon="🎙️", layout="wide")
 
-# Custom CSS Styling
+# Custom CSS Styling with Animations
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
-        
+
         .stApp { 
             background-color: #f8f8fb; 
             font-family: 'Inter', sans-serif; 
@@ -53,6 +53,41 @@ st.markdown("""
             margin-top: 1rem;
             min-height: 200px;
             text-align: left;
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .microphone-icon {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes wave {
+            0% { transform: scaleY(0.5); }
+            50% { transform: scaleY(1); }
+            100% { transform: scaleY(0.5); }
+        }
+        .audio-wave {
+            animation: wave 1s ease-in-out infinite;
+        }
+
+        @keyframes loading {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        .loading-text {
+            animation: loading 1.5s infinite;
+        }
+
+        /* Centering image */
+        .image-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -115,15 +150,17 @@ def convert_to_wav(audio_file):
         return None
 
 def main():
-        # Check if the image file exists
+    # Check if the image file exists
     if not os.path.exists("mic.png"):
         st.error("Error: 'mic.png' not found! Please check the file path.")
         return
 
-    # Load and display the image
+    # Load and display the microphone image with animation
     img = Image.open("mic.png").resize((120, 120))
+    st.markdown('<div class="image-container">', unsafe_allow_html=True)
     st.image(img, use_container_width=False)
-    
+    st.markdown('</div>', unsafe_allow_html=True)
+
     # Hero Title
     st.markdown('''
     <h1 class="hero-title">
@@ -140,87 +177,6 @@ def main():
     All you have to do is talk.
     </p>
     ''', unsafe_allow_html=True)
-    
-    # Input Mode Selection
-    input_mode = st.radio(
-        "Choose Input Method", 
-        ["Upload Audio", "Live Audio Capture"], 
-        horizontal=True
-    )
-
-    # Transcription Result Container
-    transcription_result = None
-
-    # Upload Audio Section
-    if input_mode == "Upload Audio":
-        uploaded_file = st.file_uploader(
-            "Drag and drop or choose an audio file", 
-            type=SUPPORTED_FORMATS
-        )
-        
-        if uploaded_file:
-            # Validate File
-            valid, message = validate_file(uploaded_file)
-            if not valid:
-                st.error(message)
-            
-            # Transcribe Button
-            if st.button("Transcribe", key="upload_transcribe"):
-                # Convert to WAV
-                processed_file = convert_to_wav(uploaded_file)
-                
-                if processed_file:
-                    # Attempt Transcription
-                    success, result = transcribe_audio(processed_file)
-                    
-                    if success:
-                        transcription_result = result
-
-    # Record Audio Section
-    elif input_mode == "Live Audio Capture":
-        audio_data = st.audio_input("Record your audio")
-        
-        if audio_data:
-            st.success("Audio recorded successfully!")
-            
-            if st.button("Transcribe Recorded Audio", key="record_transcribe"):
-                # Attempt Transcription
-                success, result = transcribe_audio(audio_data)
-                
-                if success:
-                    transcription_result = result
-
-    # Display Transcription Result
-    if transcription_result:
-        st.markdown("### Transcription Result")
-        
-        # Large text area for transcription
-        transcribed_text = st.text_area(
-            "Transcribed Text", 
-            value=transcription_result, 
-            height=250
-        )
-        
-        # Download Button
-        txt_filename = "transcription.txt"
-        txt_bytes = BytesIO(transcription_result.encode("utf-8"))
-        st.download_button(
-            label="Download Transcription",
-            data=txt_bytes,
-            file_name=txt_filename,
-            mime="text/plain"
-        )
-
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # Footer
-    st.markdown("""
-    <footer style="text-align:center; margin-top:2rem; color:#637082;">
-        AudioInk™ built by <a href="https://idealabs.fyi" target="_blank">Ideal Labs</a> | 
-        <a href="#privacy-policy">Privacy Policy</a> | 
-        <a href="#terms-of-use">Terms of Use</a>
-    </footer>
-    """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
