@@ -27,7 +27,7 @@ st.markdown("""
             max-width: 800px;
             margin: 0 auto;
             padding: 4rem 2rem;
-            text-align: left;
+            text-align: center;
         }
         .hero-title {
             font-size: 3.5rem;
@@ -35,7 +35,6 @@ st.markdown("""
             color: #2c3e50;
             line-height: 1.2;
             margin-bottom: 1rem;
-            margin-top: -20px;
         }
         .highlight {
             color: #ff5722;
@@ -58,7 +57,7 @@ st.markdown("""
         
         /* Water Wave Animation */
         .water-round-container {
-            margin: 0;
+            margin: 0 auto;
             overflow: hidden;
             position: relative;
             width: 200px;
@@ -170,25 +169,23 @@ def convert_to_wav(audio_file):
         return None
 
 def main():
-    col1, col2 = st.columns([1, 4])
-    with col1:
-        # Hero Title
-        st.markdown('''
-        <h1 class="hero-title">
-            Say it loud <span class="highlight">let words flow,</span><br>
-            Upload with ease <span class="highlight">watch text grow.</span>
-        </h1>
-        ''', unsafe_allow_html=True)
-        
-    with col2:
-        # Add Water Wave Animation Instead of Mic Image        
-        st.markdown('''
-        <div class="water-round-container">
-            <div class="water-wave1"></div>
-            <div class="water-wave2"></div>
-            <div class="water-wave3"></div>
-        </div>
-        ''', unsafe_allow_html=True)
+
+    # Add Water Wave Animation Instead of Mic Image
+    st.markdown('''
+    <div class="water-round-container">
+        <div class="water-wave1"></div>
+        <div class="water-wave2"></div>
+        <div class="water-wave3"></div>
+    </div>
+    ''', unsafe_allow_html=True)
+    
+    # Hero Title
+    st.markdown('''
+    <h1 class="hero-title">
+        Say it loud <span class="highlight">let words flow,</span><br>
+        Upload with ease <span class="highlight">watch text grow.</span>
+    </h1>
+    ''', unsafe_allow_html=True)
     
     # Subtitle
     st.markdown('''
