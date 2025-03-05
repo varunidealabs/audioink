@@ -18,7 +18,7 @@ st.set_page_config(page_title="AudioInk", page_icon="🎙️", layout="wide")
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
-        
+
         .stApp { 
             background-color: #f8f8fb; 
             font-family: 'Inter', sans-serif; 
@@ -53,6 +53,60 @@ st.markdown("""
             margin-top: 1rem;
             min-height: 200px;
             text-align: left;
+        }
+        
+        /* Water Wave Animation */
+        .water-round-container {
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid silver;
+            text-align: center;
+            line-height: 50px;
+            animation: water-waves linear infinite;
+        }
+        .water-wave1 {
+            position: absolute;
+            top: 40%;
+            left: -25%;
+            background: #FF5C0A;
+            opacity: 0.7;
+            width: 200%;
+            height: 200%;
+            border-radius: 40%;
+            animation: inherit;
+            animation-duration: 5s;
+        }
+        .water-wave2 {
+            position: absolute;
+            top: 45%;
+            left: -35%;
+            background: #FF5C0A;
+            opacity: 0.5;
+            width: 200%;
+            height: 200%;
+            border-radius: 35%;
+            animation: inherit;
+            animation-duration: 7s;
+        }
+        .water-wave3 {
+            position: absolute;
+            top: 50%;
+            left: -35%;
+            background: #FF5C0A;
+            opacity: 0.3;
+            width: 200%;
+            height: 200%;
+            border-radius: 33%;
+            animation: inherit;
+            animation-duration: 11s;
+        }
+        @keyframes water-waves {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 """, unsafe_allow_html=True)
@@ -115,14 +169,15 @@ def convert_to_wav(audio_file):
         return None
 
 def main():
-        # Check if the image file exists
-    if not os.path.exists("mic.png"):
-        st.error("Error: 'mic.png' not found! Please check the file path.")
-        return
 
-    # Load and display the image
-    img = Image.open("mic.png").resize((120, 120))
-    st.image(img, use_container_width=False)
+    # Add Water Wave Animation Instead of Mic Image
+    st.markdown('''
+    <div class="water-round-container">
+        <div class="water-wave1"></div>
+        <div class="water-wave2"></div>
+        <div class="water-wave3"></div>
+    </div>
+    ''', unsafe_allow_html=True)
     
     # Hero Title
     st.markdown('''
