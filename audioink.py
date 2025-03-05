@@ -169,7 +169,11 @@ def convert_to_wav(audio_file):
         return None
 
 def main():
-    st.markdown('<div class="app-title">AudioInk</div>', unsafe_allow_html=True)
+    local_css()
+    
+    # Large AUDIOINK Title
+    st.markdown('<div class="app-title">AUDIOINK</div>', unsafe_allow_html=True)
+    
     # Add Water Wave Animation Instead of Mic Image
     st.markdown('''
     <div class="water-round-container">
