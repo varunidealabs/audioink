@@ -114,6 +114,8 @@ def convert_to_wav(audio_file):
         return None
 
 def main():
+    # If you have a local image file
+    img = Image.open('mic.png').resize((120, 120))
     st.markdown('<div class="main-container">', unsafe_allow_html=True)
 
     # Hero Title
