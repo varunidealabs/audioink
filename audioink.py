@@ -174,7 +174,7 @@ def main():
 
     # Add Water Wave Animation 
    col1, col2 = st.columns([1, 3])
-    with col1:
+   with col1:
     # Hero Title
         st.markdown('''
         <h1 class="hero-title">
