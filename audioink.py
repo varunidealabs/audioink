@@ -174,6 +174,15 @@ def main():
     # Add Water Wave Animation 
     col1, col2 = st.columns([1, 3])
     with col1:
+        # Hero Title
+        st.markdown('''
+        <h1 class="hero-title">
+            Say it loud <span class="highlight">let words flow,</span><br>
+            Upload with ease <span class="highlight">watch text grow.</span>
+        </h1>
+        ''', unsafe_allow_html=True)
+
+        with col2:
         # Add Water Wave Animation Instead of Mic Image
         st.markdown('''
         <div class="water-round-container">
@@ -181,14 +190,6 @@ def main():
             <div class="water-wave2"></div>
             <div class="water-wave3"></div>
         </div>
-        ''', unsafe_allow_html=True)
-    with col2:
-        # Hero Title
-        st.markdown('''
-        <h1 class="hero-title">
-            Say it loud <span class="highlight">let words flow,</span><br>
-            Upload with ease <span class="highlight">watch text grow.</span>
-        </h1>
         ''', unsafe_allow_html=True)
     
     # Subtitle
