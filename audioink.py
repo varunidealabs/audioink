@@ -15,10 +15,10 @@ AudioSegment.ffprobe = which("ffprobe")
 st.set_page_config(page_title="AudioInk", page_icon="🎙️", layout="wide")
 
 # Custom CSS Styling
-st.markdown("""
+def local_css():
+    st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
-
         .stApp { 
             background-color: #f8f8fb; 
             font-family: 'Inter', sans-serif; 
@@ -28,6 +28,14 @@ st.markdown("""
             margin: 0 auto;
             padding: 4rem 2rem;
             text-align: center;
+        }
+        .app-title {
+            font-size: 6rem;
+            font-weight: 800;
+            color: #FF5C0A;
+            text-align: center;
+            margin-bottom: 2rem;
+            letter-spacing: -3px;
         }
         .hero-title {
             font-size: 3.5rem;
@@ -44,15 +52,7 @@ st.markdown("""
             color: #637082;
             max-width: 700px;
             margin: 0 auto 2rem;
-        }
-        .transcription-area {
-            background-color: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-top: 1rem;
-            min-height: 200px;
-            text-align: left;
+            text-align: center;
         }
         
         /* Water Wave Animation */
@@ -109,7 +109,7 @@ st.markdown("""
             100% { transform: rotate(360deg); }
         }
     </style>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 # API Configuration
 AZURE_WHISPER_API_URL = st.secrets.get("AZURE_WHISPER_API_URL", "https://your-api-endpoint.azure.com")
