@@ -170,11 +170,12 @@ def convert_to_wav(audio_file):
         return None
 
 def main():
+    
 
     # Add Water Wave Animation 
    col1, col2 = st.columns([1, 3])
 
-with col1:
+    with col1:
     # Hero Title
     st.markdown('''
     <h1 class="hero-title">
@@ -183,7 +184,7 @@ with col1:
     </h1>
     ''', unsafe_allow_html=True)
 
-with col2:
+    with col2:
     # Add Water Wave Animation Instead of Mic Image
     st.markdown('''
     <div class="water-round-container">
