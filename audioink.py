@@ -13,7 +13,7 @@ AudioSegment.ffprobe = which("ffprobe")
 # Page Config
 st.set_page_config(page_title="AudioInk", page_icon="🎙️", layout="wide")
 
-# Custom CSS Styling with Integrated Logo
+# Custom CSS Styling
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
@@ -22,24 +22,14 @@ st.markdown("""
             background-color: #f8f8fb; 
             font-family: 'Inter', sans-serif; 
         }
-        .logo-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-        .logo-svg {
-            max-width: 300px;
-            height: auto;
-        }
         .main-container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 2rem 2rem;
+            padding: 4rem 2rem;
             text-align: center;
         }
         .hero-title {
-            font-size: 2.5rem;
+            font-size: 3.5rem;
             font-weight: 800;
             color: #2c3e50;
             line-height: 1.2;
@@ -54,68 +44,41 @@ st.markdown("""
             max-width: 700px;
             margin: 0 auto 2rem;
         }
-        .transcription-area {
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            background-color: #ff5722;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(255,87,34,0.2);
+        }
+        .transcription-container {
             background-color: white;
-            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+        .drag-drop-area {
+            border: 2px dashed #ff5722;
             border-radius: 10px;
-            padding: 1rem;
-            margin-top: 1rem;
-            min-height: 200px;
-            text-align: left;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
         }
     </style>
 """, unsafe_allow_html=True)
-
-# Logo SVG
-logo_svg = """
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" class="logo-svg">
-  <defs>
-    <linearGradient id="modernGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#34495e;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  
-  <g transform="translate(20, 25) scale(0.5)">
-    <path d="M50 80 L50 70 
-             Q50 40 75 40 
-             Q100 40 100 70 
-             L100 80" 
-          fill="none" 
-          stroke="#ff5722" 
-          stroke-width="10" 
-          stroke-linecap="round"/>
-    
-    <path d="M120 55 Q130 45, 130 55 Q130 65, 120 55" 
-          fill="none" 
-          stroke="#ff5722" 
-          stroke-width="3" 
-          stroke-linecap="round" 
-          opacity="0.6"/>
-    
-    <path d="M135 50 Q145 40, 145 55 Q145 70, 135 60" 
-          fill="none" 
-          stroke="#ff5722" 
-          stroke-width="3" 
-          stroke-linecap="round" 
-          opacity="0.4"/>
-  </g>
-  
-  <g transform="translate(150, 65)">
-    <text x="0" y="0" 
-          font-family="Inter, sans-serif" 
-          font-weight="800" 
-          font-size="36" 
-          fill="#2c3e50">
-      Audio<tspan fill="#ff5722">Ink</tspan>
-    </text>
-  </g>
-  
-  <line x1="140" y1="35" x2="140" y2="75" 
-        stroke="#e0e0e0" 
-        stroke-width="2"/>
-</svg>
-"""
 
 # API Configuration
 AZURE_WHISPER_API_URL = st.secrets.get("AZURE_WHISPER_API_URL", "https://your-api-endpoint.azure.com")
@@ -123,30 +86,19 @@ API_KEY = st.secrets.get("AZURE_API_KEY", "your_api_key_here")
 SUPPORTED_FORMATS = ["mp3", "mp4", "mpeg", "mpga", "m4a", "wav", "webm"]
 MAX_FILE_SIZE = 25 * 1024 * 1024
 
+# Transcription Functions (Keep the same as in the original code)
 def transcribe_audio(audio_file):
-    headers = {
-        "api-key": API_KEY, 
-        "Authorization": f"Bearer {API_KEY}"
-    }
+    headers = {"api-key": API_KEY, "Authorization": f"Bearer {API_KEY}"}
     try:
-        audio_file.seek(0)
-        files = {"file": (audio_file.name, audio_file, "audio/wav")}
-        
         with st.spinner("Transcribing audio..."):
-            response = requests.post(
-                AZURE_WHISPER_API_URL, 
-                headers=headers, 
-                files=files, 
-                timeout=60
-            )
-            
+            audio_file.seek(0)
+            files = {"file": (audio_file.name, audio_file, "audio/wav")}
+            response = requests.post(AZURE_WHISPER_API_URL, headers=headers, files=files, timeout=60)
             if response.status_code == 200:
-                transcription = response.json().get("text", "No text returned")
-                return True, transcription
-            else:
-                return False, f"API Error: {response.status_code} - {response.text}"
-    except Exception as e:
-        return False, f"Transcription error: {str(e)}"
+                return True, response.json().get("text", "No text returned from API")
+            return False, f"API Error: {response.status_code} - {response.text}"
+    except requests.exceptions.RequestException as e:
+        return False, f"Error: {str(e)}"
 
 def validate_file(file):
     if not file:
@@ -175,12 +127,16 @@ def convert_to_wav(audio_file):
         return None
 
 def main():
-    # Logo Container
-    st.markdown('<div class="logo-container">', unsafe_allow_html=True)
-    st.markdown(logo_svg, unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-
+    # Hero Section
     st.markdown('<div class="main-container">', unsafe_allow_html=True)
+
+    # Hero Title
+    st.markdown('''
+    <h1 class="hero-title">
+        Say it loud <span class="highlight">let words flow,</span><br>
+        Upload with ease <span class="highlight">watch text grow.</span>
+    </h1>
+    ''', unsafe_allow_html=True)
     
     # Subtitle
     st.markdown('''
@@ -191,76 +147,75 @@ def main():
     </p>
     ''', unsafe_allow_html=True)
     
-    # Input Mode Selection
-    input_mode = st.radio(
-        "Choose Input Method", 
-        ["Upload Audio", "Live Audio Capture"], 
-        horizontal=True
-    )
-
-    # Transcription Result Container
-    transcription_result = None
-
+    # CTA Buttons
+    col1, col2 = st.columns(2)
+    with col1:
+        upload_clicked = st.button("Upload Audio", key="upload_btn", use_container_width=True)
+    with col2:
+        record_clicked = st.button("Live Audio Capture", key="record_btn", use_container_width=True)
+    
+    # Transcription Container
+    st.markdown('<div class="transcription-container">', unsafe_allow_html=True)
+    
     # Upload Audio Section
-    if input_mode == "Upload Audio":
-        uploaded_file = st.file_uploader(
-            "Drag and drop or choose an audio file", 
-            type=SUPPORTED_FORMATS
-        )
+    if upload_clicked:
+        st.subheader("Upload Audio")
+        uploaded_file = st.file_uploader("Choose an audio file", type=SUPPORTED_FORMATS)
         
         if uploaded_file:
-            # Validate File
+            # Drag and Drop Area
+            st.markdown('''
+            <div class="drag-drop-area">
+                Drag and drop file here
+            </div>
+            ''', unsafe_allow_html=True)
+            
             valid, message = validate_file(uploaded_file)
             if not valid:
                 st.error(message)
-            
-            # Transcribe Button
-            if st.button("Transcribe", key="upload_transcribe"):
-                # Convert to WAV
+            elif st.button("Transcribe"):
                 processed_file = convert_to_wav(uploaded_file)
-                
                 if processed_file:
-                    # Attempt Transcription
                     success, result = transcribe_audio(processed_file)
-                    
                     if success:
-                        transcription_result = result
-
+                        st.subheader("Transcription Result")
+                        st.write(result)
+                        
+                        # Download Button
+                        txt_filename = "transcription.txt"
+                        txt_bytes = BytesIO(result.encode("utf-8"))
+                        st.download_button(label="Download Transcription",
+                                           data=txt_bytes,
+                                           file_name=txt_filename,
+                                           mime="text/plain")
+                    else:
+                        st.error(result)
+    
     # Record Audio Section
-    elif input_mode == "Live Audio Capture":
+    if record_clicked:
+        st.subheader("Live Audio Capture")
         audio_data = st.audio_input("Record your audio")
         
         if audio_data:
             st.success("Audio recorded successfully!")
-            
-            if st.button("Transcribe Recorded Audio", key="record_transcribe"):
-                # Attempt Transcription
+            if st.button("Transcribe Recorded Audio"):
+                audio_data.seek(0)
                 success, result = transcribe_audio(audio_data)
-                
                 if success:
-                    transcription_result = result
-
-    # Display Transcription Result
-    if transcription_result:
-        st.markdown("### Transcription Result")
-        
-        # Large text area for transcription
-        transcribed_text = st.text_area(
-            "Transcribed Text", 
-            value=transcription_result, 
-            height=250
-        )
-        
-        # Download Button
-        txt_filename = "transcription.txt"
-        txt_bytes = BytesIO(transcription_result.encode("utf-8"))
-        st.download_button(
-            label="Download Transcription",
-            data=txt_bytes,
-            file_name=txt_filename,
-            mime="text/plain"
-        )
-
+                    st.subheader("Transcription Result")
+                    st.write(result)
+                    
+                    # Download Button
+                    txt_filename = "transcription.txt"
+                    txt_bytes = BytesIO(result.encode("utf-8"))
+                    st.download_button(label="Download Transcription",
+                                       data=txt_bytes,
+                                       file_name=txt_filename,
+                                       mime="text/plain")
+                else:
+                    st.error(result)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
     # Footer
