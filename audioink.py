@@ -122,6 +122,8 @@ def main():
 
     # Load and display the image
     img = Image.open("mic.png").resize((120, 120))
+    st.image(img, use_container_width=False)
+    
     # Hero Title
     st.markdown('''
     <h1 class="hero-title">
