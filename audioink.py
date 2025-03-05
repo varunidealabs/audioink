@@ -27,7 +27,7 @@ st.markdown("""
             max-width: 800px;
             margin: 0 auto;
             padding: 4rem 2rem;
-            text-align: center;
+            text-align: left;
         }
         .hero-title {
             font-size: 3.5rem;
@@ -35,6 +35,7 @@ st.markdown("""
             color: #2c3e50;
             line-height: 1.2;
             margin-bottom: 1rem;
+            margin-top: -20px;
         }
         .highlight {
             color: #ff5722;
@@ -57,7 +58,7 @@ st.markdown("""
         
         /* Water Wave Animation */
         .water-round-container {
-            margin: 0 auto;
+            margin: 0;
             overflow: hidden;
             position: relative;
             width: 200px;
