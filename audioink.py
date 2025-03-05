@@ -43,6 +43,8 @@ def local_css():
             position: relative;
             overflow: hidden;
             border-radius: 50%;
+            border: 2px solid #FF5C0A;
+            animation: water-waves linear 10s infinite;
         }
         .water-wave1 {
             position: absolute;
@@ -53,6 +55,7 @@ def local_css():
             width: 200%;
             height: 200%;
             border-radius: 40%;
+            animation: wave1 5s linear infinite;
         }
         .water-wave2 {
             position: absolute;
@@ -63,6 +66,7 @@ def local_css():
             width: 200%;
             height: 200%;
             border-radius: 35%;
+            animation: wave2 7s linear infinite;
         }
         .water-wave3 {
             position: absolute;
@@ -73,6 +77,23 @@ def local_css():
             width: 200%;
             height: 200%;
             border-radius: 33%;
+            animation: wave3 11s linear infinite;
+        }
+        @keyframes water-waves {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes wave1 {
+            0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+            50% { transform: translateX(10%) translateY(-10%) rotate(180deg); }
+        }
+        @keyframes wave2 {
+            0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+            50% { transform: translateX(-10%) translateY(10%) rotate(-180deg); }
+        }
+        @keyframes wave3 {
+            0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+            50% { transform: translateX(5%) translateY(-5%) rotate(90deg); }
         }
         .hero-title {
             font-size: 3.5rem;
