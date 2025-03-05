@@ -16,43 +16,80 @@ st.set_page_config(page_title="AudioInk", page_icon="🎙️", layout="wide")
 # Custom CSS Styling
 st.markdown("""
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
         .stApp { 
             background-color: #f8f8fb; 
             font-family: 'Inter', sans-serif; 
         }
         .main-container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 4rem 2rem;
             text-align: center;
         }
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
         .hero-title {
-            font-size: 3.5rem;
+            font-size: 4rem;
             font-weight: 800;
             color: #2c3e50;
             line-height: 1.2;
-            margin-bottom: 1rem;
+            max-width: 800px;
         }
         .highlight {
             color: #ff5722;
         }
         .subtitle {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             color: #637082;
             max-width: 700px;
-            margin: 0 auto 2rem;
+            margin-bottom: 2rem;
         }
-        .transcribe-container {
-            background-color: white;
-            border-radius: 15px;
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(255,87,34,0.2);
+        }
+        .primary-button {
+            background-color: #ff5722;
+            color: white;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
             padding: 2rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        .how-it-works {
-            background-color: #f0f4f8;
             border-radius: 15px;
-            padding: 1.5rem;
-            margin-top: 1rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -63,7 +100,7 @@ API_KEY = st.secrets.get("AZURE_API_KEY", "your_api_key_here")
 SUPPORTED_FORMATS = ["mp3", "mp4", "mpeg", "mpga", "m4a", "wav", "webm"]
 MAX_FILE_SIZE = 25 * 1024 * 1024
 
-# Transcription Function
+# Transcription Functions (Keep the same as in the original code)
 def transcribe_audio(audio_file):
     headers = {"api-key": API_KEY, "Authorization": f"Bearer {API_KEY}"}
     try:
@@ -77,7 +114,6 @@ def transcribe_audio(audio_file):
     except requests.exceptions.RequestException as e:
         return False, f"Error: {str(e)}"
 
-# Validate Uploaded File
 def validate_file(file):
     if not file:
         return False, "No file uploaded."
@@ -87,7 +123,6 @@ def validate_file(file):
         return False, "Unsupported file format."
     return True, "File is valid."
 
-# Convert Audio to WAV
 def convert_to_wav(audio_file):
     try:
         file_extension = audio_file.name.split(".")[-1].lower()
@@ -105,27 +140,9 @@ def convert_to_wav(audio_file):
         st.error(f"Error converting audio: {str(e)}")
         return None
 
-# Main App
 def main():
-    # Select page
-    page = st.radio("Navigate", 
-        ["Home", "Transcribe", "How It Works", "FAQ"], 
-        horizontal=True
-    )
-
-    if page == "Home":
-        home_page()
-    elif page == "Transcribe":
-        transcribe_page()
-    elif page == "How It Works":
-        how_it_works_page()
-    elif page == "FAQ":
-        faq_page()
-        
-    add_footer()    
-
-def home_page():
     st.markdown('<div class="main-container">', unsafe_allow_html=True)
+    st.markdown('<div class="hero-section">', unsafe_allow_html=True)
 
     # Hero Title
     st.markdown('''
@@ -144,159 +161,93 @@ def home_page():
     </p>
     ''', unsafe_allow_html=True)
     
-    # CTA Buttons
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown(
-            '<a href="#" class="primary-button" style="display:block; text-align:center; padding:12px; background-color:#ff5722; color:white; text-decoration:none; border-radius:50px;">Start Transcribing</a>', 
-            unsafe_allow_html=True
-        )
-    with col2:
-        st.markdown(
-            '<a href="#" class="secondary-button" style="display:block; text-align:center; padding:12px; background-color:#ff5722; color:white; text-decoration:none; border-radius:50px;">Live audio and upload file</a>', 
-            unsafe_allow_html=True
-        )
-    
-    st.markdown('</div>', unsafe_allow_html=True)
-
-def add_footer():
-    st.markdown("""
-    <style>
-    .footer {
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        background-color: #f8f8fb;
-        color: #637082;
-        text-align: center;
-        padding: 10px;
-        font-size: 0.9rem;
-        z-index: 1000;
-    }
-    .footer a {
-        color: #2c3e50;
-        text-decoration: none;
-        margin: 0 10px;
-        transition: color 0.3s ease;
-        cursor: pointer;
-    }
-    .footer a:hover {
-        color: #ff5722;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("""
-    <div class="footer">
-        AudioInk™ built by <a href="https://idealabs.fyi" target="_blank">Ideal Labs</a> | FAQs  | 
-        <a href="#privacy-policy">Privacy Policy</a> | 
-        <a href="#terms-of-use">Terms of Use</a>
+    # CTA Buttons with JavaScript for Modal
+    st.markdown('''
+    <div class="cta-buttons">
+        <a href="#" class="cta-button primary-button" onclick="openModal('upload')">Start Transcribing</a>
+        <a href="#" class="cta-button primary-button" onclick="openModal('record')">Live Audio Capture</a>
     </div>
-    """, unsafe_allow_html=True)
-
-
-def transcribe_page():
-    st.markdown('<div class="transcribe-container">', unsafe_allow_html=True)
-    st.header("🎙️ Transcribe Your Audio")
     
-    # Tabs for different input methods
-    tab1, tab2 = st.tabs(["Upload Audio", "Record Audio"])
-    
-    transcription_text = None  # Store the transcribed text
-    
-    with tab1:
-        st.subheader(" Upload Audio File")
-        uploaded_file = st.file_uploader("Choose an audio file", type=SUPPORTED_FORMATS)
+    <script>
+    function openModal(type) {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h2>${type === 'upload' ? 'Upload Audio' : 'Record Audio'}</h2>
+                <div id="modalContent"></div>
+            </div>
+        `;
+        document.body.appendChild(modal);
         
-        if uploaded_file:
-            valid, message = validate_file(uploaded_file)
-            if not valid:
-                st.error(message)
-            elif st.button("⚡ Transcribe Uploaded Audio"):
-                processed_file = convert_to_wav(uploaded_file)
-                if processed_file:
-                    success, result = transcribe_audio(processed_file)
-                    if success:
-                        transcription_text = result
-                        st.subheader(" Transcription Result")
-                        st.write(transcription_text)
-                    else:
-                        st.error(result)
-
-    with tab2:
-        st.subheader("🎤 Record Audio")
-        audio_data = st.audio_input("Record your audio")
+        modal.onclick = function(event) {
+            if (event.target == modal) {
+                document.body.removeChild(modal);
+            }
+        };
         
-        if audio_data:
-            st.success("🎙️ Audio recorded successfully!")
-            if st.button(" Transcribe Recorded Audio"):
-                audio_data.seek(0)
-                success, result = transcribe_audio(audio_data)
+        window.handleModalClose = function() {
+            document.body.removeChild(modal);
+        };
+    }
+    </script>
+    ''', unsafe_allow_html=True)
+
+    # Modal Content Handling
+    audio_data = None
+    transcription_text = None
+    
+    # Upload Modal Functionality
+    uploaded_file = st.file_uploader("Choose an audio file", type=SUPPORTED_FORMATS, key="upload_modal")
+    if uploaded_file:
+        valid, message = validate_file(uploaded_file)
+        if not valid:
+            st.error(message)
+        elif st.button("Transcribe Uploaded Audio"):
+            processed_file = convert_to_wav(uploaded_file)
+            if processed_file:
+                success, result = transcribe_audio(processed_file)
                 if success:
                     transcription_text = result
-                    st.subheader(" Transcription Result")
+                    st.success("Transcription Complete!")
                     st.write(transcription_text)
                 else:
                     st.error(result)
 
-    # **Enable Download Button Only if Transcription is Available**
+    # Record Audio Modal Functionality
+    audio_data = st.audio_input("Record your audio", key="record_modal")
+    if audio_data:
+        st.success("Audio recorded successfully!")
+        if st.button("Transcribe Recorded Audio"):
+            audio_data.seek(0)
+            success, result = transcribe_audio(audio_data)
+            if success:
+                transcription_text = result
+                st.success("Transcription Complete!")
+                st.write(transcription_text)
+            else:
+                st.error(result)
+
+    # Download Button
     if transcription_text:
         txt_filename = "transcription.txt"
         txt_bytes = BytesIO(transcription_text.encode("utf-8"))
-        st.download_button(label="⬇️ Download as TXT",
+        st.download_button(label="Download Transcription",
                            data=txt_bytes,
                            file_name=txt_filename,
                            mime="text/plain")
-    
+
+    st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-
-def how_it_works_page():
-    st.markdown('<div class="how-it-works">', unsafe_allow_html=True)
-    st.header("How AudioInk Works")
-    
-    # Steps explanation
-    steps = [
-        "Choose your input method: Upload or Record",
-        "Select your audio file or record audio",
-        "Click 'Transcribe'",
-        "Get instant, accurate text transcription"
-    ]
-    
-    for i, step in enumerate(steps, 1):
-        st.markdown(f"""
-        <div style="display:flex; align-items:center; margin-bottom:1rem;">
-            <div style="background-color:#ff5722; color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-right:1rem;">
-                {i}
-            </div>
-            <span style="font-size:1.1rem;">{step}</span>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    st.markdown('</div>', unsafe_allow_html=True)
-
-def faq_page():
-    
-    st.header("Frequently Asked Questions")
-    
-    faqs = [
-        (" What types of audio files can I upload?", "We support **MP3, MP4, WAV, M4A, WEBM, and more.** If your format isn't listed, try converting it to a supported type."),
-        (" Is there a file size limit?", "Yes, you can upload files up to **25MB**, which is about **5 minutes of high-quality audio.**"),
-        (" How fast is the transcription?", "Our AI delivers transcriptions in **seconds**, so you get your text **faster than you can type!**"),
-        (" How accurate is the transcription?", "We use **cutting-edge AI** to provide highly accurate transcriptions. Clear audio means even **better results!**"),
-        (" Can I record live audio instead of uploading a file?", "Yes! Use our **built-in recorder** to capture and transcribe audio instantly—no uploads needed."),
-        (" Is my data private and secure?", "Absolutely. **Your audio is encrypted**, processed securely, and never stored permanently."),
-        (" Do I need to install anything?", "No downloads, no installs—**just open your browser and start transcribing.**")
-    ]
-    
-    for question, answer in faqs:
-        with st.expander(question):
-            st.write(answer)
-    st.markdown("---")
-    st.subheader("Have more questions?")
-    st.write("If you need further assistance, feel free to reach out:")
-    st.markdown(" **Email:** [a@idealabs.fyi](mailto:a@idealabs.fyi)")       
+    # Footer
+    st.markdown("""
+    <footer style="text-align:center; margin-top:2rem; color:#637082;">
+        AudioInk™ built by <a href="https://idealabs.fyi" target="_blank">Ideal Labs</a> | 
+        <a href="#privacy-policy">Privacy Policy</a> | 
+        <a href="#terms-of-use">Terms of Use</a>
+    </footer>
+    """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
