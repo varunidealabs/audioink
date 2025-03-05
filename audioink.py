@@ -43,7 +43,7 @@ def local_css():
             position: relative;
             overflow: hidden;
             border-radius: 50%;
-            border: 2px solid #FF5C0A;
+            border: 2px solid silver;
             animation: water-waves linear 10s infinite;
         }
         .water-wave1 {
