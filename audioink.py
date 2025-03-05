@@ -122,8 +122,6 @@ def main():
 
     # Load and display the image
     img = Image.open("mic.png").resize((120, 120))
-    st.image(img, caption="Microphone", use_container_width=True)
-
     # Hero Title
     st.markdown('''
     <h1 class="hero-title">
