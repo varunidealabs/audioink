@@ -23,24 +23,17 @@ st.markdown("""
             font-family: 'Inter', sans-serif; 
         }
         .main-container {
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 4rem 2rem;
             text-align: center;
         }
-        .hero-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2rem;
-        }
         .hero-title {
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: 800;
             color: #2c3e50;
             line-height: 1.2;
-            max-width: 800px;
+            margin-bottom: 1rem;
         }
         .highlight {
             color: #ff5722;
@@ -49,12 +42,13 @@ st.markdown("""
             font-size: 1.25rem;
             color: #637082;
             max-width: 700px;
-            margin-bottom: 2rem;
+            margin: 0 auto 2rem;
         }
         .cta-buttons {
             display: flex;
             gap: 1.5rem;
             justify-content: center;
+            margin-bottom: 2rem;
         }
         .cta-button {
             display: inline-flex;
@@ -63,33 +57,25 @@ st.markdown("""
             padding: 15px 30px;
             border-radius: 50px;
             font-weight: 600;
+            background-color: #ff5722;
+            color: white;
             text-decoration: none;
             transition: all 0.3s ease;
             box-shadow: 0 10px 20px rgba(255,87,34,0.2);
         }
-        .primary-button {
-            background-color: #ff5722;
-            color: white;
-        }
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background: white;
-            padding: 2rem;
+        .transcription-container {
+            background-color: white;
             border-radius: 15px;
-            max-width: 500px;
-            width: 100%;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+        .drag-drop-area {
+            border: 2px dashed #ff5722;
+            border-radius: 10px;
+            padding: 2rem;
             text-align: center;
+            margin-bottom: 1rem;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -141,8 +127,8 @@ def convert_to_wav(audio_file):
         return None
 
 def main():
+    # Hero Section
     st.markdown('<div class="main-container">', unsafe_allow_html=True)
-    st.markdown('<div class="hero-section">', unsafe_allow_html=True)
 
     # Hero Title
     st.markdown('''
@@ -161,82 +147,74 @@ def main():
     </p>
     ''', unsafe_allow_html=True)
     
-    # CTA Buttons with JavaScript for Modal
-    st.markdown('''
-    <div class="cta-buttons">
-        <a href="#" class="cta-button primary-button" onclick="openModal('upload')">Start Transcribing</a>
-        <a href="#" class="cta-button primary-button" onclick="openModal('record')">Live Audio Capture</a>
-    </div>
+    # CTA Buttons
+    col1, col2 = st.columns(2)
+    with col1:
+        upload_clicked = st.button("Upload Audio", key="upload_btn", use_container_width=True)
+    with col2:
+        record_clicked = st.button("Live Audio Capture", key="record_btn", use_container_width=True)
     
-    <script>
-    function openModal(type) {
-        const modal = document.createElement('div');
-        modal.className = 'modal';
-        modal.innerHTML = `
-            <div class="modal-content">
-                <h2>${type === 'upload' ? 'Upload Audio' : 'Record Audio'}</h2>
-                <div id="modalContent"></div>
+    # Transcription Container
+    st.markdown('<div class="transcription-container">', unsafe_allow_html=True)
+    
+    # Upload Audio Section
+    if upload_clicked:
+        st.subheader("Upload Audio")
+        uploaded_file = st.file_uploader("Choose an audio file", type=SUPPORTED_FORMATS)
+        
+        if uploaded_file:
+            # Drag and Drop Area
+            st.markdown('''
+            <div class="drag-drop-area">
+                Drag and drop file here
             </div>
-        `;
-        document.body.appendChild(modal);
-        
-        modal.onclick = function(event) {
-            if (event.target == modal) {
-                document.body.removeChild(modal);
-            }
-        };
-        
-        window.handleModalClose = function() {
-            document.body.removeChild(modal);
-        };
-    }
-    </script>
-    ''', unsafe_allow_html=True)
-
-    # Modal Content Handling
-    audio_data = None
-    transcription_text = None
+            ''', unsafe_allow_html=True)
+            
+            valid, message = validate_file(uploaded_file)
+            if not valid:
+                st.error(message)
+            elif st.button("Transcribe"):
+                processed_file = convert_to_wav(uploaded_file)
+                if processed_file:
+                    success, result = transcribe_audio(processed_file)
+                    if success:
+                        st.subheader("Transcription Result")
+                        st.write(result)
+                        
+                        # Download Button
+                        txt_filename = "transcription.txt"
+                        txt_bytes = BytesIO(result.encode("utf-8"))
+                        st.download_button(label="Download Transcription",
+                                           data=txt_bytes,
+                                           file_name=txt_filename,
+                                           mime="text/plain")
+                    else:
+                        st.error(result)
     
-    # Upload Modal Functionality
-    uploaded_file = st.file_uploader("Choose an audio file", type=SUPPORTED_FORMATS, key="upload_modal")
-    if uploaded_file:
-        valid, message = validate_file(uploaded_file)
-        if not valid:
-            st.error(message)
-        elif st.button("Transcribe Uploaded Audio"):
-            processed_file = convert_to_wav(uploaded_file)
-            if processed_file:
-                success, result = transcribe_audio(processed_file)
+    # Record Audio Section
+    if record_clicked:
+        st.subheader("Live Audio Capture")
+        audio_data = st.audio_input("Record your audio")
+        
+        if audio_data:
+            st.success("Audio recorded successfully!")
+            if st.button("Transcribe Recorded Audio"):
+                audio_data.seek(0)
+                success, result = transcribe_audio(audio_data)
                 if success:
-                    transcription_text = result
-                    st.success("Transcription Complete!")
-                    st.write(transcription_text)
+                    st.subheader("Transcription Result")
+                    st.write(result)
+                    
+                    # Download Button
+                    txt_filename = "transcription.txt"
+                    txt_bytes = BytesIO(result.encode("utf-8"))
+                    st.download_button(label="Download Transcription",
+                                       data=txt_bytes,
+                                       file_name=txt_filename,
+                                       mime="text/plain")
                 else:
                     st.error(result)
-
-    # Record Audio Modal Functionality
-    audio_data = st.audio_input("Record your audio", key="record_modal")
-    if audio_data:
-        st.success("Audio recorded successfully!")
-        if st.button("Transcribe Recorded Audio"):
-            audio_data.seek(0)
-            success, result = transcribe_audio(audio_data)
-            if success:
-                transcription_text = result
-                st.success("Transcription Complete!")
-                st.write(transcription_text)
-            else:
-                st.error(result)
-
-    # Download Button
-    if transcription_text:
-        txt_filename = "transcription.txt"
-        txt_bytes = BytesIO(transcription_text.encode("utf-8"))
-        st.download_button(label="Download Transcription",
-                           data=txt_bytes,
-                           file_name=txt_filename,
-                           mime="text/plain")
-
+    
     st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
