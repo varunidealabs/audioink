@@ -23,19 +23,56 @@ def local_css():
             background-color: #f8f8fb; 
             font-family: 'Inter', sans-serif; 
         }
-        .main-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-            text-align: center;
+        .header-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
         .app-title {
-            font-size: 6rem;
+            font-size: 3rem;
             font-weight: 800;
             color: #FF5C0A;
-            text-align: center;
-            margin-bottom: 2rem;
-            letter-spacing: -3px;
+            text-align: left;
+            letter-spacing: -2px;
+            margin: 0;
+        }
+        .water-round-container {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 50%;
+        }
+        .water-wave1 {
+            position: absolute;
+            top: 40%;
+            left: -25%;
+            background: #FF5C0A;
+            opacity: 0.7;
+            width: 200%;
+            height: 200%;
+            border-radius: 40%;
+        }
+        .water-wave2 {
+            position: absolute;
+            top: 45%;
+            left: -35%;
+            background: #FF5C0A;
+            opacity: 0.5;
+            width: 200%;
+            height: 200%;
+            border-radius: 35%;
+        }
+        .water-wave3 {
+            position: absolute;
+            top: 50%;
+            left: -35%;
+            background: #FF5C0A;
+            opacity: 0.3;
+            width: 200%;
+            height: 200%;
+            border-radius: 33%;
         }
         .hero-title {
             font-size: 3.5rem;
@@ -52,61 +89,7 @@ def local_css():
             color: #637082;
             max-width: 700px;
             margin: 0 auto 2rem;
-            text-align: center;
-        }
-        
-        /* Water Wave Animation */
-        .water-round-container {
-            margin: 0 auto;
-            overflow: hidden;
-            position: relative;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 3px solid silver;
-            text-align: center;
-            line-height: 50px;
-            animation: water-waves linear infinite;
-        }
-        .water-wave1 {
-            position: absolute;
-            top: 40%;
-            left: -25%;
-            background: #FF5C0A;
-            opacity: 0.7;
-            width: 200%;
-            height: 200%;
-            border-radius: 40%;
-            animation: inherit;
-            animation-duration: 5s;
-        }
-        .water-wave2 {
-            position: absolute;
-            top: 45%;
-            left: -35%;
-            background: #FF5C0A;
-            opacity: 0.5;
-            width: 200%;
-            height: 200%;
-            border-radius: 35%;
-            animation: inherit;
-            animation-duration: 7s;
-        }
-        .water-wave3 {
-            position: absolute;
-            top: 50%;
-            left: -35%;
-            background: #FF5C0A;
-            opacity: 0.3;
-            width: 200%;
-            height: 200%;
-            border-radius: 33%;
-            animation: inherit;
-            animation-duration: 11s;
-        }
-        @keyframes water-waves {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            text-align: left;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -169,17 +152,18 @@ def convert_to_wav(audio_file):
         return None
 
 def main():
+    # Apply custom CSS
     local_css()
     
-    # Large AUDIOINK Title
-    st.markdown('<div class="app-title">AUDIOINK</div>', unsafe_allow_html=True)
-    
-    # Add Water Wave Animation Instead of Mic Image
+    # Header Container with Logo and Title
     st.markdown('''
-    <div class="water-round-container">
-        <div class="water-wave1"></div>
-        <div class="water-wave2"></div>
-        <div class="water-wave3"></div>
+    <div class="header-container">
+        <div class="water-round-container">
+            <div class="water-wave1"></div>
+            <div class="water-wave2"></div>
+            <div class="water-wave3"></div>
+        </div>
+        <div class="app-title">AUDIOINK</div>
     </div>
     ''', unsafe_allow_html=True)
     
