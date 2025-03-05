@@ -13,7 +13,7 @@ AudioSegment.ffprobe = which("ffprobe")
 # Page Config
 st.set_page_config(page_title="AudioInk", page_icon="🎙️", layout="wide")
 
-# Custom CSS Styling
+# Custom CSS Styling with Integrated Logo
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
@@ -22,14 +22,24 @@ st.markdown("""
             background-color: #f8f8fb; 
             font-family: 'Inter', sans-serif; 
         }
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .logo-svg {
+            max-width: 300px;
+            height: auto;
+        }
         .main-container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 4rem 2rem;
+            padding: 2rem 2rem;
             text-align: center;
         }
         .hero-title {
-            font-size: 3.5rem;
+            font-size: 2.5rem;
             font-weight: 800;
             color: #2c3e50;
             line-height: 1.2;
@@ -55,6 +65,57 @@ st.markdown("""
         }
     </style>
 """, unsafe_allow_html=True)
+
+# Logo SVG
+logo_svg = """
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100" class="logo-svg">
+  <defs>
+    <linearGradient id="modernGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#34495e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <g transform="translate(20, 25) scale(0.5)">
+    <path d="M50 80 L50 70 
+             Q50 40 75 40 
+             Q100 40 100 70 
+             L100 80" 
+          fill="none" 
+          stroke="#ff5722" 
+          stroke-width="10" 
+          stroke-linecap="round"/>
+    
+    <path d="M120 55 Q130 45, 130 55 Q130 65, 120 55" 
+          fill="none" 
+          stroke="#ff5722" 
+          stroke-width="3" 
+          stroke-linecap="round" 
+          opacity="0.6"/>
+    
+    <path d="M135 50 Q145 40, 145 55 Q145 70, 135 60" 
+          fill="none" 
+          stroke="#ff5722" 
+          stroke-width="3" 
+          stroke-linecap="round" 
+          opacity="0.4"/>
+  </g>
+  
+  <g transform="translate(150, 65)">
+    <text x="0" y="0" 
+          font-family="Inter, sans-serif" 
+          font-weight="800" 
+          font-size="36" 
+          fill="#2c3e50">
+      Audio<tspan fill="#ff5722">Ink</tspan>
+    </text>
+  </g>
+  
+  <line x1="140" y1="35" x2="140" y2="75" 
+        stroke="#e0e0e0" 
+        stroke-width="2"/>
+</svg>
+"""
 
 # API Configuration
 AZURE_WHISPER_API_URL = st.secrets.get("AZURE_WHISPER_API_URL", "https://your-api-endpoint.azure.com")
@@ -114,15 +175,12 @@ def convert_to_wav(audio_file):
         return None
 
 def main():
-    st.markdown('<div class="main-container">', unsafe_allow_html=True)
+    # Logo Container
+    st.markdown('<div class="logo-container">', unsafe_allow_html=True)
+    st.markdown(logo_svg, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    # Hero Title
-    st.markdown('''
-    <h1 class="hero-title">
-        Say it loud <span class="highlight">let words flow,</span><br>
-        Upload with ease <span class="highlight">watch text grow.</span>
-    </h1>
-    ''', unsafe_allow_html=True)
+    st.markdown('<div class="main-container">', unsafe_allow_html=True)
     
     # Subtitle
     st.markdown('''
