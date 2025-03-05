@@ -55,7 +55,8 @@ def local_css():
             width: 200%;
             height: 200%;
             border-radius: 40%;
-            animation: wave1 5s linear infinite;
+            animation: inherit;
+            animation-duration: 5s;
         }
         .water-wave2 {
             position: absolute;
@@ -67,7 +68,7 @@ def local_css():
             height: 200%;
             border-radius: 35%;
             animation: inherit;
-            animation-duration: 5s;
+            animation-duration: 7s;
         }
         .water-wave3 {
             position: absolute;
@@ -78,7 +79,8 @@ def local_css():
             width: 200%;
             height: 200%;
             border-radius: 33%;
-            animation: wave3 11s linear infinite;
+            animation: inherit;
+            animation-duration: 11s;
         }
         @keyframes water-waves {
             0% { transform: rotate(0deg); }
