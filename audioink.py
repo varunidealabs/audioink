@@ -170,7 +170,7 @@ def convert_to_wav(audio_file):
         return None
 
 def main():
-    col1, col2 = st.columns([1, 5])
+    col1, col2 = st.columns([1, 4])
     with col1:
         # Hero Title
         st.markdown('''
@@ -189,10 +189,6 @@ def main():
             <div class="water-wave3"></div>
         </div>
         ''', unsafe_allow_html=True)
-        
-        
-        
-
     
     # Subtitle
     st.markdown('''
