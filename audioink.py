@@ -447,16 +447,6 @@ def main():
         res_col1, res_col2, res_col3 = st.columns([1, 3, 1])
         
         with res_col2:
-            st.markdown("""
-            <div style="background-color: #f0f7ff; border-radius: 12px; padding: 20px; margin-top: 30px;">
-                <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                    <div style="background-color: #2196f3; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
-                        <span style="color: white; font-size: 20px;">📝</span>
-                    </div>
-                    <h3 style="margin: 0; color: #0d47a1; font-weight: 600;">Transcription Result</h3>
-                </div>
-            """, unsafe_allow_html=True)
-            
             # Large text area for transcription
             transcribed_text = st.text_area(
                 "Transcribed Text", 
