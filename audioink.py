@@ -248,19 +248,19 @@ def main():
     st.markdown("<p>Choose Input Method</p>", unsafe_allow_html=True)
     
     # Use columns with custom widths to make buttons narrower
-    col1, col_space, col2, col_end = st.columns([3, 0.5, 4, 5])
+    col1, col2, col3 = st.columns([1,1,1])
     
-    with col1:
+     with col2:
+        # These are hidden buttons that will be triggered by JavaScript
         upload_btn = st.button("Upload Audio", 
-                              key="upload_audio_btn", 
-                              use_container_width=True,
-                              type="primary" if st.session_state.active_mode == "upload" else "secondary")
+                              key="upload_audio_btn",
+                              type="primary" if st.session_state.active_mode == "upload" else "secondary",
+                              use_container_width=False)
         
-    with col2:
         record_btn = st.button("Live Audio Capture", 
-                              key="live_audio_btn", 
-                              use_container_width=True,
-                              type="primary" if st.session_state.active_mode == "record" else "secondary")
+                              key="live_audio_btn",
+                              type="primary" if st.session_state.active_mode == "record" else "secondary",
+                              use_container_width=False)
     
     # Handle button clicks to set active mode
     if upload_btn:
