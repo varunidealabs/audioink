@@ -248,7 +248,7 @@ def main():
     st.markdown("<p>Choose Input Method</p>", unsafe_allow_html=True)
     
     # Use columns with custom widths to make buttons narrower
-    col1, col_space, col2, col_end = st.columns([1, 2, 1, 4])
+    col1, col_space, col2, col_end = st.columns([1, 0, 1, 4])
     
     with col1:
         upload_btn = st.button("Upload Audio", 
