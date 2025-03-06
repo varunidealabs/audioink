@@ -299,109 +299,111 @@ def main():
 
     # Upload Audio Section
     if st.session_state.active_mode == "upload":
-        # Create a visually appealing upload container
-        st.markdown("""
-        <style>
-            /* Custom styling for the file uploader */
-            [data-testid="stFileUploader"] {
-                width: 100%;
-            }
-            
-            [data-testid="stFileUploader"] section {
-                border: 2px dashed #FF5C0A !important;
-                border-radius: 12px !important;
-                padding: 30px !important;
-                background-color: rgba(255, 92, 10, 0.03) !important;
-                text-align: center !important;
-                transition: all 0.3s ease !important;
-                position: relative;
-            }
-            
-            [data-testid="stFileUploader"] section:hover {
-                background-color: rgba(255, 92, 10, 0.08) !important;
-                border-color: #FF7D3C !important;
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(255, 92, 10, 0.15);
-            }
-            
-            /* Hide default text */
-            [data-testid="stFileUploader"] section p {
-                display: none !important;
-            }
-            
-            /* Hide the default button and recreate it */
-            [data-testid="stFileUploader"] section button {
-                display: none !important;
-            }
-        </style>
+        # Create columns to control width
+        col1, col2, col3 = st.columns([1, 2, 1])
         
-        <div style="text-align: center; margin-bottom: 25px; margin-top: 10px;">
-            <div style="display: inline-block; background-color: rgba(255, 92, 10, 0.1); padding: 8px 16px; border-radius: 20px;">
-                <span style="color: #FF5C0A; font-weight: 500;">Upload your audio file</span>
-            </div>
-        </div>
-        
-        <div class="custom-uploader" style="position: relative; margin-bottom: 20px;">
-            <!-- Custom upload icon -->
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 0; pointer-events: none;">
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#FF5C0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>
-                    <div style="margin-top: 15px; font-size: 18px; color: #637082; font-weight: 500;">Drag and drop file here</div>
-                    <div style="margin-top: 10px; font-size: 14px; color: #8795a1;">
-                        <span style="color: #FF5C0A; font-weight: 500;">Browse files</span> or drop your audio
-                    </div>
-                    <div style="margin-top: 10px; font-size: 12px; color: #8795a1;">
-                        Limit 200MB per file • MP3, MP4, MPEG, MPGA, M4A, WAV, WEBM
-                    </div>
+        with col2:
+            # Create a visually appealing upload container
+            st.markdown("""
+            <style>
+                /* Custom styling for the file uploader */
+                [data-testid="stFileUploader"] {
+                    width: 100%;
+                }
+                
+                [data-testid="stFileUploader"] section {
+                    border: 2px dashed #FF5C0A !important;
+                    border-radius: 12px !important;
+                    padding: 30px !important;
+                    background-color: rgba(255, 92, 10, 0.03) !important;
+                    text-align: center !important;
+                    transition: all 0.3s ease !important;
+                    position: relative;
+                }
+                
+                [data-testid="stFileUploader"] section:hover {
+                    background-color: rgba(255, 92, 10, 0.08) !important;
+                    border-color: #FF7D3C !important;
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(255, 92, 10, 0.15);
+                }
+                
+                /* Hide default text */
+                [data-testid="stFileUploader"] section p {
+                    display: none !important;
+                }
+                
+                /* Hide the default button and recreate it */
+                [data-testid="stFileUploader"] section button {
+                    display: none !important;
+                }
+            </style>
+            
+            <div style="text-align: center; margin-bottom: 25px; margin-top: 10px;">
+                <div style="display: inline-block; background-color: rgba(255, 92, 10, 0.1); padding: 8px 16px; border-radius: 20px;">
+                    <span style="color: #FF5C0A; font-weight: 500;">Upload your audio file</span>
                 </div>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        uploaded_file = st.file_uploader(
-            "Drag and drop or choose an audio file", 
-            type=SUPPORTED_FORMATS
-        )
-        
-        if uploaded_file:
-            # Show file info
-            file_size_kb = uploaded_file.size / 1024
-            file_type = uploaded_file.type
             
-            st.markdown(f"""
-            <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px; margin: 15px 0; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-                <div style="background: linear-gradient(135deg, #FF5C0A 0%, #FF8F53 100%); width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 3px 6px rgba(255,92,10,0.2);">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 18V5l12-2v13"></path>
-                        <circle cx="6" cy="18" r="3"></circle>
-                        <circle cx="18" cy="16" r="3"></circle>
-                    </svg>
-                </div>
-                <div style="flex-grow: 1;">
-                    <div style="font-weight: 600; color: #2c3e50; font-size: 16px; margin-bottom: 4px; display: flex; justify-content: space-between;">
-                        <span>{uploaded_file.name}</span>
-                        <span style="color: #FF5C0A; font-size: 14px;">{file_size_kb:.1f} KB</span>
-                    </div>
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <div style="font-size: 13px; color: #6c757d; background-color: rgba(108,117,125,0.1); padding: 2px 8px; border-radius: 12px;">{file_type}</div>
-                        <div style="font-size: 13px; color: #28a745;">Ready to transcribe</div>
+            <div class="custom-uploader" style="position: relative; margin-bottom: 20px;">
+                <!-- Custom upload icon -->
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 0; pointer-events: none;">
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#FF5C0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <div style="margin-top: 15px; font-size: 18px; color: #637082; font-weight: 500;">Drag and drop file here</div>
+                        <div style="margin-top: 10px; font-size: 14px; color: #8795a1;">
+                            <span style="color: #FF5C0A; font-weight: 500;">Browse files</span> or drop your audio
+                        </div>
+                        <div style="margin-top: 10px; font-size: 12px; color: #8795a1;">
+                            Limit 200MB • MP3, WAV, M4A, MP4
+                        </div>
                     </div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
             
-            # Validate File
-            valid, message = validate_file(uploaded_file)
-            if not valid:
-                st.error(message)
+            uploaded_file = st.file_uploader(
+                "Drag and drop or choose an audio file", 
+                type=SUPPORTED_FORMATS
+            )
             
-            # Transcribe Button
-            col1, col2, col3 = st.columns([1, 1, 1])
-            with col2:
+            if uploaded_file:
+                # Show file info
+                file_size_kb = uploaded_file.size / 1024
+                file_type = uploaded_file.type
+                
+                st.markdown(f"""
+                <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px; margin: 15px 0; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                    <div style="background: linear-gradient(135deg, #FF5C0A 0%, #FF8F53 100%); width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 3px 6px rgba(255,92,10,0.2);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18V5l12-2v13"></path>
+                            <circle cx="6" cy="18" r="3"></circle>
+                            <circle cx="18" cy="16" r="3"></circle>
+                        </svg>
+                    </div>
+                    <div style="flex-grow: 1;">
+                        <div style="font-weight: 600; color: #2c3e50; font-size: 16px; margin-bottom: 4px; display: flex; justify-content: space-between;">
+                            <span>{uploaded_file.name}</span>
+                            <span style="color: #FF5C0A; font-size: 14px;">{file_size_kb:.1f} KB</span>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div style="font-size: 13px; color: #6c757d; background-color: rgba(108,117,125,0.1); padding: 2px 8px; border-radius: 12px;">{file_type}</div>
+                            <div style="font-size: 13px; color: #28a745;">Ready to transcribe</div>
+                        </div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Validate File
+                valid, message = validate_file(uploaded_file)
+                if not valid:
+                    st.error(message)
+                
+                # Transcribe Button
                 if st.button("🎧 Transcribe Now", key="upload_transcribe", use_container_width=True, type="primary"):
                     # Convert to WAV
                     with st.spinner("Converting audio..."):
@@ -419,97 +421,105 @@ def main():
 
     # Record Audio Section
     elif st.session_state.active_mode == "record":
-        st.markdown("""
-        <div style="text-align: center; margin-bottom: 15px;">
-            <div style="display: inline-block; background-color: rgba(255, 92, 10, 0.1); padding: 8px 16px; border-radius: 20px;">
-                <span style="color: #FF5C0A; font-weight: 500;">Record your voice</span>
-            </div>
-        </div>
+        # Create columns to control width
+        col1, col2, col3 = st.columns([1, 2, 1])
         
-        <div style="background-color: #f8f9fa; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 20px;">
-            <p style="color: #637082; margin-bottom: 15px;">Click the microphone button below and speak clearly. When you're done, click again to stop recording.</p>
-            <div style="font-size: 40px; margin-bottom: 10px;">🎙️</div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        audio_data = st.audio_input("Record your audio")
-        
-        if audio_data:
+        with col2:
             st.markdown("""
-            <div style="background-color: #e8f5e9; border-radius: 8px; padding: 12px; margin: 15px 0; border-left: 4px solid #4caf50;">
-                <div style="display: flex; align-items: center;">
-                    <div style="background-color: #4caf50; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
-                        <span style="color: white; font-size: 16px;">✓</span>
-                    </div>
-                    <div style="font-weight: 500; color: #2e7d32;">Audio recorded successfully!</div>
+            <div style="text-align: center; margin-bottom: 15px;">
+                <div style="display: inline-block; background-color: rgba(255, 92, 10, 0.1); padding: 8px 16px; border-radius: 20px;">
+                    <span style="color: #FF5C0A; font-weight: 500;">Record your voice</span>
                 </div>
+            </div>
+            
+            <div style="background-color: #f8f9fa; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 20px;">
+                <p style="color: #637082; margin-bottom: 15px;">Click the microphone button below and speak clearly. When you're done, click again to stop recording.</p>
+                <div style="font-size: 40px; margin-bottom: 10px;">🎙️</div>
             </div>
             """, unsafe_allow_html=True)
             
-            # Play back recorded audio
-            st.markdown("<p style='font-weight: 500; margin-bottom: 5px;'>Audio Preview:</p>", unsafe_allow_html=True)
-            st.audio(audio_data)
+            audio_data = st.audio_input("Record your audio")
             
-            if st.button("Transcribe Recorded Audio", key="record_transcribe", use_container_width=False):
-                # Attempt Transcription
-                with st.spinner("Processing your audio..."):
-                    success, result = transcribe_audio(audio_data)
-                    
-                    if success:
-                        transcription_result = result
-                    else:
-                        st.error(result)
+            if audio_data:
+                st.markdown("""
+                <div style="background-color: #e8f5e9; border-radius: 8px; padding: 12px; margin: 15px 0; border-left: 4px solid #4caf50;">
+                    <div style="display: flex; align-items: center;">
+                        <div style="background-color: #4caf50; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                            <span style="color: white; font-size: 16px;">✓</span>
+                        </div>
+                        <div style="font-weight: 500; color: #2e7d32;">Audio recorded successfully!</div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Play back recorded audio
+                st.markdown("<p style='font-weight: 500; margin-bottom: 5px;'>Audio Preview:</p>", unsafe_allow_html=True)
+                st.audio(audio_data)
+                
+                if st.button("Transcribe Recorded Audio", key="record_transcribe", use_container_width=True):
+                    # Attempt Transcription
+                    with st.spinner("Processing your audio..."):
+                        success, result = transcribe_audio(audio_data)
+                        
+                        if success:
+                            transcription_result = result
+                        else:
+                            st.error(result)
 
     # Display Transcription Result
     if transcription_result:
-        st.markdown("""
-        <div style="background-color: #f0f7ff; border-radius: 12px; padding: 20px; margin-top: 30px;">
-            <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                <div style="background-color: #2196f3; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
-                    <span style="color: white; font-size: 20px;">📝</span>
+        # Create columns to control width for the transcription result
+        res_col1, res_col2, res_col3 = st.columns([1, 3, 1])
+        
+        with res_col2:
+            st.markdown("""
+            <div style="background-color: #f0f7ff; border-radius: 12px; padding: 20px; margin-top: 30px;">
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="background-color: #2196f3; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                        <span style="color: white; font-size: 20px;">📝</span>
+                    </div>
+                    <h3 style="margin: 0; color: #0d47a1; font-weight: 600;">Transcription Result</h3>
                 </div>
-                <h3 style="margin: 0; color: #0d47a1; font-weight: 600;">Transcription Result</h3>
-            </div>
-        """, unsafe_allow_html=True)
-        
-        # Large text area for transcription
-        transcribed_text = st.text_area(
-            "Transcribed Text", 
-            value=transcription_result, 
-            height=250
-        )
-        
-        # Calculate word and character count
-        word_count = len(transcription_result.split())
-        char_count = len(transcription_result)
-        
-        st.markdown(f"""
-        <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 14px; color: #637082;">
-            <div>{word_count} words</div>
-            <div>{char_count} characters</div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Action buttons
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            # Copy button (simulated with download)
-            if st.button("📋 Copy to Clipboard", type="secondary"):
-                st.info("Text copied to clipboard functionality would be implemented here in a full app")
-        
-        with col2:
-            # Download Button
-            txt_filename = "transcription.txt"
-            txt_bytes = BytesIO(transcription_result.encode("utf-8"))
-            st.download_button(
-                label="⬇️ Download Transcription",
-                data=txt_bytes,
-                file_name=txt_filename,
-                mime="text/plain"
+            """, unsafe_allow_html=True)
+            
+            # Large text area for transcription
+            transcribed_text = st.text_area(
+                "Transcribed Text", 
+                value=transcription_result, 
+                height=250
             )
-        
-        st.markdown("</div>", unsafe_allow_html=True)
+            
+            # Calculate word and character count
+            word_count = len(transcription_result.split())
+            char_count = len(transcription_result)
+            
+            st.markdown(f"""
+            <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 14px; color: #637082;">
+                <div>{word_count} words</div>
+                <div>{char_count} characters</div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Action buttons
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                # Copy button (simulated with download)
+                if st.button("📋 Copy to Clipboard", type="secondary"):
+                    st.info("Text copied to clipboard functionality would be implemented here in a full app")
+            
+            with col2:
+                # Download Button
+                txt_filename = "transcription.txt"
+                txt_bytes = BytesIO(transcription_result.encode("utf-8"))
+                st.download_button(
+                    label="⬇️ Download Transcription",
+                    data=txt_bytes,
+                    file_name=txt_filename,
+                    mime="text/plain"
+                )
+            
+            st.markdown("</div>", unsafe_allow_html=True)
 
     # Modern Footer with App Info Card
     st.markdown("""
