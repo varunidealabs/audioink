@@ -252,12 +252,7 @@ def main():
     # Custom Toggle Buttons
     st.markdown("<p>Choose Input Method</p>", unsafe_allow_html=True)
     
-    # Create custom HTML/CSS buttons that look like in your reference image
-    upload_bg_color = "#FF5C0A" if st.session_state.active_mode == "upload" else "#FFFFFF"
-    upload_text_color = "#FFFFFF" if st.session_state.active_mode == "upload" else "#333333"
-    record_bg_color = "#FF5C0A" if st.session_state.active_mode == "record" else "#FFFFFF"
-    record_text_color = "#FFFFFF" if st.session_state.active_mode == "record" else "#333333"
-    
+
     st.markdown(f"""
     <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
         <button 
