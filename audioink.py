@@ -347,6 +347,11 @@ def main():
                 [data-testid="stFileUploader"] section button {
                     display: none !important;
                 }
+                
+                /* Hide the file preview */
+                .uploadedFile {
+                    display: none !important;
+                }
             </style>
             
             <div style="text-align: center; margin-bottom: 25px; margin-top: 10px;">
@@ -362,29 +367,29 @@ def main():
             )
             
             if uploaded_file:
-                # Show file info
+                # Show file info in a custom format similar to the images
                 file_size_kb = uploaded_file.size / 1024
                 file_type = uploaded_file.type
                 
                 st.markdown(f"""
                 <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px; margin: 15px 0; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-                    <div style="background: linear-gradient(135deg, #FF5C0A 0%, #FF8F53 100%); width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 3px 6px rgba(255,92,10,0.2);">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M9 18V5l12-2v13"></path>
-                            <circle cx="6" cy="18" r="3"></circle>
-                            <circle cx="18" cy="16" r="3"></circle>
-                        </svg>
+                    <div style="background: #FF5C0A; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                        <span style="color: white; font-size: 24px;">🎵</span>
                     </div>
                     <div style="flex-grow: 1;">
-                        <div style="font-weight: 600; color: #2c3e50; font-size: 16px; margin-bottom: 4px; display: flex; justify-content: space-between;">
-                            <span>{uploaded_file.name}</span>
-                            <span style="color: #FF5C0A; font-size: 14px;">{file_size_kb:.1f} KB</span>
+                        <div style="font-weight: 600; color: #2c3e50; font-size: 16px; margin-bottom: 4px;">
+                            {uploaded_file.name}
                         </div>
                         <div style="display: flex; align-items: center; justify-content: space-between;">
-                            <div style="font-size: 13px; color: #6c757d; background-color: rgba(108,117,125,0.1); padding: 2px 8px; border-radius: 12px;">{file_type}</div>
-                            <div style="font-size: 13px; color: #28a745;">Ready to transcribe</div>
+                            <div style="font-size: 13px; color: #6c757d;">audio/mpeg</div>
+                            <div style="font-size: 13px; color: #FF5C0A; font-weight: 500;">{file_size_kb:.1f} KB</div>
                         </div>
                     </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-top: 4px; padding: 0 5px;">
+                    <div></div>
+                    <div style="font-size: 13px; color: #28a745;">Ready to transcribe</div>
                 </div>
                 """, unsafe_allow_html=True)
                 
