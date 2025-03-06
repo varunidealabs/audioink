@@ -118,10 +118,27 @@ def local_css():
         }
         
         /* Custom toggle button styling */
-        /* Custom styling for the button container */
-        div[data-testid="column"] [data-testid="stButton"] {
-            max-width: 180px;
-            margin: 0 auto;
+        /* Custom button styling */
+        .custom-btn {
+            padding: 10px 25px;
+            border-radius: 4px; /* Regular shape, not oval */
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 180px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .custom-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Hide the actual Streamlit buttons */
+        [data-testid="stHorizontalBlock"] [data-testid="column"]:nth-child(2) [data-testid="stButton"] {
+            display: none;
         }
         
         /* Style improvements for the file uploader */
@@ -130,22 +147,10 @@ def local_css():
             border: 2px dashed #e2e8f0 !important;
         }
         
-        /* Adjust spacing for better visual hierarchy */
-        div.stButton > button {
-            font-weight: 500;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        
         /* Styling for the audio input section */
         div[data-testid="stAudioInput"] {
             border-radius: 10px;
             margin-top: 8px;
-        }
-        
-        /* Add subtle animation to active elements */
-        div[data-testid="stButton"] > button[data-testid="baseButton-primary"] {
-            transition: all 0.3s ease;
-            transform: scale(1.02);
         }
     </style>
     """, unsafe_allow_html=True)
@@ -247,10 +252,34 @@ def main():
     # Custom Toggle Buttons
     st.markdown("<p>Choose Input Method</p>", unsafe_allow_html=True)
     
-    # Use columns with custom widths to make buttons narrower
-    col1, col2, col3 = st.columns([1,1,1])
+    # Create custom HTML/CSS buttons that look like in your reference image
+    upload_bg_color = "#FF5C0A" if st.session_state.active_mode == "upload" else "#FFFFFF"
+    upload_text_color = "#FFFFFF" if st.session_state.active_mode == "upload" else "#333333"
+    record_bg_color = "#FF5C0A" if st.session_state.active_mode == "record" else "#FFFFFF"
+    record_text_color = "#FFFFFF" if st.session_state.active_mode == "record" else "#333333"
     
-     with col2:
+    st.markdown(f"""
+    <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+        <button 
+            id="upload-btn" 
+            class="custom-btn" 
+            style="background-color: {upload_bg_color}; color: {upload_text_color}; border: 1px solid #E0E0E0;"
+            onclick="document.querySelector('[data-testid=\\"stButton\\"] button:first-child').click();">
+            Upload Audio
+        </button>
+        <button 
+            id="record-btn" 
+            class="custom-btn" 
+            style="background-color: {record_bg_color}; color: {record_text_color}; border: 1px solid #E0E0E0;"
+            onclick="document.querySelector('[data-testid=\\"stButton\\"] button:nth-child(2)').click();">
+            Live Audio Capture
+        </button>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Hidden buttons that actually trigger the Streamlit state changes
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col2:
         # These are hidden buttons that will be triggered by JavaScript
         upload_btn = st.button("Upload Audio", 
                               key="upload_audio_btn",
