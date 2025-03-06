@@ -242,8 +242,6 @@ def main():
     ''', unsafe_allow_html=True)
     
     # Custom Toggle Buttons
-    st.markdown("<p>Choose Input Method</p>", unsafe_allow_html=True)
-    
     col1, col2 = st.columns(2)
     
     with col1:
