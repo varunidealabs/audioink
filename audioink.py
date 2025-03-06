@@ -344,26 +344,6 @@ def main():
                     <span style="color: #FF5C0A; font-weight: 500;">Upload your audio file</span>
                 </div>
             </div>
-            
-            <div class="custom-uploader" style="position: relative; margin-bottom: 20px;">
-                <!-- Custom upload icon -->
-                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 0; pointer-events: none;">
-                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#FF5C0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="17 8 12 3 7 8"></polyline>
-                            <line x1="12" y1="3" x2="12" y2="15"></line>
-                        </svg>
-                        <div style="margin-top: 15px; font-size: 18px; color: #637082; font-weight: 500;">Drag and drop file here</div>
-                        <div style="margin-top: 10px; font-size: 14px; color: #8795a1;">
-                            <span style="color: #FF5C0A; font-weight: 500;">Browse files</span> or drop your audio
-                        </div>
-                        <div style="margin-top: 10px; font-size: 12px; color: #8795a1;">
-                            Limit 200MB • MP3, WAV, M4A, MP4
-                        </div>
-                    </div>
-                </div>
-            </div>
             """, unsafe_allow_html=True)
             
             uploaded_file = st.file_uploader(
