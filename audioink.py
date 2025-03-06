@@ -132,7 +132,7 @@ def local_css():
             border-color: #FF7D3C !important;
         }
         
-        /* Styling for the audio input section */
+        /* Styling for the audio input section - enhance the circular buttons */
         div[data-testid="stAudioInput"] {
             border-radius: 12px !important;
             border: 2px solid #FF5C0A !important;
@@ -150,11 +150,21 @@ def local_css():
             height: 56px !important;
             box-shadow: 0 4px 10px rgba(255, 92, 10, 0.3) !important;
             transition: all 0.3s ease !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
         }
         
         div[data-testid="stAudioInput"] button:hover {
             transform: scale(1.05) !important;
             box-shadow: 0 6px 12px rgba(255, 92, 10, 0.4) !important;
+        }
+        
+        /* Style the waveform container */
+        div[data-testid="stAudioInput"] > div:nth-child(2) {
+            background-color: #f8f9fa !important;
+            border-radius: 8px !important;
+            padding: 8px 12px !important;
         }
         
         /* Custom button styling */
@@ -267,7 +277,8 @@ def main():
     ''', unsafe_allow_html=True)
     
     # Custom Toggle Buttons
-    st.markdown("<p>Let's try this out </p>", unsafe_allow_html=True)
+    st.markdown("<p>Choose Input Method</p>", unsafe_allow_html=True)
+    
     # Use columns to center the buttons
     col1, col2, col3 = st.columns([1, 2, 1])
     
@@ -410,7 +421,6 @@ def main():
                     <span style="color: #FF5C0A; font-weight: 500;">Record your voice</span>
                 </div>
             </div>
-
             """, unsafe_allow_html=True)
             
             audio_data = st.audio_input("Record your audio")
@@ -427,9 +437,7 @@ def main():
                 </div>
                 """, unsafe_allow_html=True)
                 
-                # Play back recorded audio
-                st.markdown("<p style='font-weight: 500; margin-bottom: 5px;'>Audio Preview:</p>", unsafe_allow_html=True)
-                st.audio(audio_data)
+                # Removed audio preview display
                 
                 if st.button("Transcribe Recorded Audio", key="record_transcribe", use_container_width=True):
                     # Attempt Transcription
@@ -447,6 +455,16 @@ def main():
         res_col1, res_col2, res_col3 = st.columns([1, 3, 1])
         
         with res_col2:
+            st.markdown("""
+            <div style="background-color: #f0f7ff; border-radius: 12px; padding: 20px; margin-top: 30px;">
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="background-color: #2196f3; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                        <span style="color: white; font-size: 20px;">📝</span>
+                    </div>
+                    <h3 style="margin: 0; color: #0d47a1; font-weight: 600;">Transcription Result</h3>
+                </div>
+            """, unsafe_allow_html=True)
+            
             # Large text area for transcription
             transcribed_text = st.text_area(
                 "Transcribed Text", 
@@ -486,6 +504,30 @@ def main():
             
             st.markdown("</div>", unsafe_allow_html=True)
 
+    # Modern Footer with App Info Card
+    st.markdown("""
+    <div style="margin-top: 4rem;">
+        <div style="max-width: 800px; margin: 0 auto; background-color: #f3f4f6; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                <div style="width: 40px; height: 40px; position: relative; overflow: hidden; border-radius: 50%; margin-right: 15px; background: linear-gradient(135deg, #FF5C0A 0%, #FF8F53 100%);">
+                </div>
+                <div>
+                    <h3 style="margin: 0; color: #2c3e50; font-size: 18px;">AudioInk</h3>
+                    <p style="margin: 0; color: #637082; font-size: 14px;">Voice to text, simplified.</p>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: 15px; font-size: 14px;">
+                <div style="color: #637082;">
+                    Built by <a href="https://idealabs.fyi" target="_blank" style="color: #FF5C0A; text-decoration: none;">Ideal Labs</a>
+                </div>
+                <div>
+                    <a href="#privacy-policy" style="color: #637082; margin-right: 15px; text-decoration: none;">Privacy</a>
+                    <a href="#terms-of-use" style="color: #637082; text-decoration: none;">Terms</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
