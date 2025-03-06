@@ -120,14 +120,62 @@ def local_css():
         /* Custom toggle button styling */
         /* Style improvements for the file uploader */
         .uploadedFile {
-            border-radius: 10px !important;
-            border: 2px dashed #e2e8f0 !important;
+            border-radius: 12px !important;
+            border: 2px dashed #FF5C0A !important;
+            background-color: rgba(255, 92, 10, 0.05) !important;
+            padding: 20px !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .uploadedFile:hover {
+            background-color: rgba(255, 92, 10, 0.1) !important;
+            border-color: #FF7D3C !important;
+        }
+        
+        /* Style the file upload label and button */
+        div[data-testid="stFileUploader"] label {
+            font-weight: 500 !important;
+            color: #2c3e50 !important;
+            font-size: 16px !important;
+        }
+        
+        div[data-testid="stFileUploader"] button {
+            background-color: #f8f9fa !important;
+            color: #2c3e50 !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 8px !important;
+            font-weight: 500 !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        div[data-testid="stFileUploader"] button:hover {
+            background-color: #e9ecef !important;
+            border-color: #cbd3da !important;
         }
         
         /* Styling for the audio input section */
         div[data-testid="stAudioInput"] {
-            border-radius: 10px;
-            margin-top: 8px;
+            border-radius: 12px !important;
+            border: 2px solid #FF5C0A !important;
+            background-color: rgba(255, 92, 10, 0.05) !important;
+            padding: 12px !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+            margin-top: 8px !important;
+        }
+        
+        div[data-testid="stAudioInput"] button {
+            background-color: #FF5C0A !important;
+            color: white !important;
+            border-radius: 50% !important;
+            width: 56px !important;
+            height: 56px !important;
+            box-shadow: 0 4px 10px rgba(255, 92, 10, 0.3) !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        div[data-testid="stAudioInput"] button:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 6px 12px rgba(255, 92, 10, 0.4) !important;
         }
         
         /* Custom button styling */
@@ -141,6 +189,26 @@ def local_css():
         div.stButton > button:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Add an icon for the upload zone */
+        div[data-testid="stFileUploader"] {
+            position: relative;
+        }
+        
+        div[data-testid="stFileUploader"]::before {
+            content: '';
+            display: block;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23FF5C0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>');
+            width: 40px;
+            height: 40px;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 1;
+            opacity: 0.7;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -240,7 +308,7 @@ def main():
     ''', unsafe_allow_html=True)
     
     # Custom Toggle Buttons
-    st.markdown("<p>See how it works</p>", unsafe_allow_html=True)
+    st.markdown("<p>Choose Input Method</p>", unsafe_allow_html=True)
     
     # Use columns to center the buttons
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -272,19 +340,43 @@ def main():
 
     # Upload Audio Section
     if st.session_state.active_mode == "upload":
+        st.markdown("""
+        <div style="text-align: center; margin-bottom: 15px;">
+            <div style="display: inline-block; background-color: rgba(255, 92, 10, 0.1); padding: 8px 16px; border-radius: 20px;">
+                <span style="color: #FF5C0A; font-weight: 500;">Upload your audio file</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
         uploaded_file = st.file_uploader(
             "Drag and drop or choose an audio file", 
             type=SUPPORTED_FORMATS
         )
         
         if uploaded_file:
+            # Show file info
+            file_size_kb = uploaded_file.size / 1024
+            file_type = uploaded_file.type
+            
+            st.markdown(f"""
+            <div style="background-color: #f8f9fa; border-radius: 8px; padding: 10px 15px; margin: 10px 0; display: flex; align-items: center;">
+                <div style="background-color: #FF5C0A; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                    <span style="color: white; font-size: 20px;">🎵</span>
+                </div>
+                <div>
+                    <div style="font-weight: 600; color: #2c3e50;">{uploaded_file.name}</div>
+                    <div style="font-size: 12px; color: #6c757d;">{file_type} • {file_size_kb:.1f} KB</div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
             # Validate File
             valid, message = validate_file(uploaded_file)
             if not valid:
                 st.error(message)
             
             # Transcribe Button
-            if st.button("Transcribe", key="upload_transcribe"):
+            if st.button("Transcribe", key="upload_transcribe", use_container_width=False):
                 # Convert to WAV
                 processed_file = convert_to_wav(uploaded_file)
                 
@@ -299,23 +391,58 @@ def main():
 
     # Record Audio Section
     elif st.session_state.active_mode == "record":
+        st.markdown("""
+        <div style="text-align: center; margin-bottom: 15px;">
+            <div style="display: inline-block; background-color: rgba(255, 92, 10, 0.1); padding: 8px 16px; border-radius: 20px;">
+                <span style="color: #FF5C0A; font-weight: 500;">Record your voice</span>
+            </div>
+        </div>
+        
+        <div style="background-color: #f8f9fa; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 20px;">
+            <p style="color: #637082; margin-bottom: 15px;">Click the microphone button below and speak clearly. When you're done, click again to stop recording.</p>
+            <div style="font-size: 40px; margin-bottom: 10px;">🎙️</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
         audio_data = st.audio_input("Record your audio")
         
         if audio_data:
-            st.success("Audio recorded successfully!")
+            st.markdown("""
+            <div style="background-color: #e8f5e9; border-radius: 8px; padding: 12px; margin: 15px 0; border-left: 4px solid #4caf50;">
+                <div style="display: flex; align-items: center;">
+                    <div style="background-color: #4caf50; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                        <span style="color: white; font-size: 16px;">✓</span>
+                    </div>
+                    <div style="font-weight: 500; color: #2e7d32;">Audio recorded successfully!</div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
             
-            if st.button("Transcribe Recorded Audio", key="record_transcribe"):
+            # Play back recorded audio
+            st.markdown("<p style='font-weight: 500; margin-bottom: 5px;'>Audio Preview:</p>", unsafe_allow_html=True)
+            st.audio(audio_data)
+            
+            if st.button("Transcribe Recorded Audio", key="record_transcribe", use_container_width=False):
                 # Attempt Transcription
-                success, result = transcribe_audio(audio_data)
-                
-                if success:
-                    transcription_result = result
-                else:
-                    st.error(result)
+                with st.spinner("Processing your audio..."):
+                    success, result = transcribe_audio(audio_data)
+                    
+                    if success:
+                        transcription_result = result
+                    else:
+                        st.error(result)
 
     # Display Transcription Result
     if transcription_result:
-        st.markdown("### Transcription Result")
+        st.markdown("""
+        <div style="background-color: #f0f7ff; border-radius: 12px; padding: 20px; margin-top: 30px;">
+            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                <div style="background-color: #2196f3; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                    <span style="color: white; font-size: 20px;">📝</span>
+                </div>
+                <h3 style="margin: 0; color: #0d47a1; font-weight: 600;">Transcription Result</h3>
+            </div>
+        """, unsafe_allow_html=True)
         
         # Large text area for transcription
         transcribed_text = st.text_area(
@@ -324,17 +451,62 @@ def main():
             height=250
         )
         
-        # Download Button
-        txt_filename = "transcription.txt"
-        txt_bytes = BytesIO(transcription_result.encode("utf-8"))
-        st.download_button(
-            label="Download Transcription",
-            data=txt_bytes,
-            file_name=txt_filename,
-            mime="text/plain"
-        )
+        # Calculate word and character count
+        word_count = len(transcription_result.split())
+        char_count = len(transcription_result)
+        
+        st.markdown(f"""
+        <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 14px; color: #637082;">
+            <div>{word_count} words</div>
+            <div>{char_count} characters</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Action buttons
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # Copy button (simulated with download)
+            if st.button("📋 Copy to Clipboard", type="secondary"):
+                st.info("Text copied to clipboard functionality would be implemented here in a full app")
+        
+        with col2:
+            # Download Button
+            txt_filename = "transcription.txt"
+            txt_bytes = BytesIO(transcription_result.encode("utf-8"))
+            st.download_button(
+                label="⬇️ Download Transcription",
+                data=txt_bytes,
+                file_name=txt_filename,
+                mime="text/plain"
+            )
+        
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    
+    # Modern Footer with App Info Card
+    st.markdown("""
+    <div style="margin-top: 4rem;">
+        <div style="max-width: 800px; margin: 0 auto; background-color: #f3f4f6; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                <div style="width: 40px; height: 40px; position: relative; overflow: hidden; border-radius: 50%; margin-right: 15px; background: linear-gradient(135deg, #FF5C0A 0%, #FF8F53 100%);">
+                </div>
+                <div>
+                    <h3 style="margin: 0; color: #2c3e50; font-size: 18px;">AudioInk</h3>
+                    <p style="margin: 0; color: #637082; font-size: 14px;">Voice to text, simplified.</p>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: 15px; font-size: 14px;">
+                <div style="color: #637082;">
+                    Built by <a href="https://idealabs.fyi" target="_blank" style="color: #FF5C0A; text-decoration: none;">Ideal Labs</a>
+                </div>
+                <div>
+                    <a href="#privacy-policy" style="color: #637082; margin-right: 15px; text-decoration: none;">Privacy</a>
+                    <a href="#terms-of-use" style="color: #637082; text-decoration: none;">Terms</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
