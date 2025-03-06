@@ -116,6 +116,34 @@ def local_css():
             margin: 0 auto 2rem;
             text-align: left;
         }
+        
+        /* Custom toggle button styling */
+        .toggle-button-container {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .toggle-button {
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            color: #333;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-button.active {
+            background-color: #FF5C0A;
+            color: white;
+        }
+        
+        /* Hide the Streamlit elements we don't want to show initially */
+        .initially-hidden {
+            display: none;
+        }
     </style>
     """, unsafe_allow_html=True)
 
@@ -180,6 +208,10 @@ def main():
     # Apply custom CSS
     local_css()
     
+    # Initialize session state to track which mode is active
+    if 'active_mode' not in st.session_state:
+        st.session_state.active_mode = None
+    
     # Header Container with Logo and Title
     st.markdown('''
     <div class="header-container">
@@ -209,18 +241,34 @@ def main():
     </p>
     ''', unsafe_allow_html=True)
     
-    # Input Mode Selection
-    input_mode = st.radio(
-        "Choose Input Method", 
-        ["Upload Audio", "Live Audio Capture"], 
-        horizontal=True
-    )
-
+    # Custom Toggle Buttons
+    st.markdown("<p>Choose Input Method</p>", unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        upload_btn = st.button("Upload Audio", 
+                              key="upload_audio_btn", 
+                              use_container_width=True,
+                              type="primary" if st.session_state.active_mode == "upload" else "secondary")
+        
+    with col2:
+        record_btn = st.button("Live Audio Capture", 
+                              key="live_audio_btn", 
+                              use_container_width=True,
+                              type="primary" if st.session_state.active_mode == "record" else "secondary")
+    
+    # Handle button clicks to set active mode
+    if upload_btn:
+        st.session_state.active_mode = "upload"
+    elif record_btn:
+        st.session_state.active_mode = "record"
+        
     # Transcription Result Container
     transcription_result = None
 
     # Upload Audio Section
-    if input_mode == "Upload Audio":
+    if st.session_state.active_mode == "upload":
         uploaded_file = st.file_uploader(
             "Drag and drop or choose an audio file", 
             type=SUPPORTED_FORMATS
@@ -243,9 +291,11 @@ def main():
                     
                     if success:
                         transcription_result = result
+                    else:
+                        st.error(result)
 
     # Record Audio Section
-    elif input_mode == "Live Audio Capture":
+    elif st.session_state.active_mode == "record":
         audio_data = st.audio_input("Record your audio")
         
         if audio_data:
@@ -257,6 +307,8 @@ def main():
                 
                 if success:
                     transcription_result = result
+                else:
+                    st.error(result)
 
     # Display Transcription Result
     if transcription_result:
@@ -278,8 +330,6 @@ def main():
             file_name=txt_filename,
             mime="text/plain"
         )
-
-    st.markdown('</div>', unsafe_allow_html=True)
 
     # Footer
     st.markdown("""
