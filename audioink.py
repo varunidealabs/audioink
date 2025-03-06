@@ -118,34 +118,31 @@ def local_css():
         }
         
         /* Custom toggle button styling */
-        /* Custom styling for the button container */
-        div[data-testid="column"] [data-testid="stButton"] {
-            max-width: 180px;
-            margin: 0 auto;
+        .toggle-button-container {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
         }
         
-        /* Style improvements for the file uploader */
-        .uploadedFile {
-            border-radius: 10px !important;
-            border: 2px dashed #e2e8f0 !important;
-        }
-        
-        /* Adjust spacing for better visual hierarchy */
-        div.stButton > button {
+        .toggle-button {
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            color: #333;
             font-weight: 500;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        
-        /* Styling for the audio input section */
-        div[data-testid="stAudioInput"] {
-            border-radius: 10px;
-            margin-top: 8px;
-        }
-        
-        /* Add subtle animation to active elements */
-        div[data-testid="stButton"] > button[data-testid="baseButton-primary"] {
+            cursor: pointer;
             transition: all 0.3s ease;
-            transform: scale(1.02);
+        }
+        
+        .toggle-button.active {
+            background-color: #FF5C0A;
+            color: white;
+        }
+        
+        /* Hide the Streamlit elements we don't want to show initially */
+        .initially-hidden {
+            display: none;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -244,11 +241,10 @@ def main():
     </p>
     ''', unsafe_allow_html=True)
     
-    # Custom Toggle Buttons
-    st.markdown("<p>Choose Input Method</p>", unsafe_allow_html=True)
-    
-    # Use columns with custom widths to make buttons narrower
     col1, col_space, col2, col_end = st.columns([1, 1, 1, 4])
+
+    # Custom Toggle Buttons
+    col1, col2 = st.columns(2)
     
     with col1:
         upload_btn = st.button("Upload Audio", 
@@ -335,29 +331,13 @@ def main():
             mime="text/plain"
         )
 
-    # Modern Footer with App Info Card
+    # Footer
     st.markdown("""
-    <div style="margin-top: 4rem;">
-        <div style="max-width: 800px; margin: 0 auto; background-color: #f3f4f6; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-            <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                <div style="width: 40px; height: 40px; position: relative; overflow: hidden; border-radius: 50%; margin-right: 15px; background: linear-gradient(135deg, #FF5C0A 0%, #FF8F53 100%);">
-                </div>
-                <div>
-                    <h3 style="margin: 0; color: #2c3e50; font-size: 18px;">AudioInk</h3>
-                    <p style="margin: 0; color: #637082; font-size: 14px;">Voice to text, simplified.</p>
-                </div>
-            </div>
-            <div style="display: flex; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: 15px; font-size: 14px;">
-                <div style="color: #637082;">
-                    Built by <a href="https://idealabs.fyi" target="_blank" style="color: #FF5C0A; text-decoration: none;">Ideal Labs</a>
-                </div>
-                <div>
-                    <a href="#privacy-policy" style="color: #637082; margin-right: 15px; text-decoration: none;">Privacy</a>
-                    <a href="#terms-of-use" style="color: #637082; text-decoration: none;">Terms</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <footer style="text-align:center; margin-top:2rem; color:#637082;">
+        AudioInk™ built by <a href="https://idealabs.fyi" target="_blank">Ideal Labs</a> | 
+        <a href="#privacy-policy">Privacy Policy</a> | 
+        <a href="#terms-of-use">Terms of Use</a>
+    </footer>
     """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
