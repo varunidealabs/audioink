@@ -118,29 +118,6 @@ def local_css():
         }
         
         /* Custom toggle button styling */
-        /* Custom button styling */
-        .custom-btn {
-            padding: 10px 25px;
-            border-radius: 4px; /* Regular shape, not oval */
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 180px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        
-        .custom-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        /* Hide the actual Streamlit buttons */
-        [data-testid="stHorizontalBlock"] [data-testid="column"]:nth-child(2) [data-testid="stButton"] {
-            display: none;
-        }
-        
         /* Style improvements for the file uploader */
         .uploadedFile {
             border-radius: 10px !important;
@@ -151,6 +128,19 @@ def local_css():
         div[data-testid="stAudioInput"] {
             border-radius: 10px;
             margin-top: 8px;
+        }
+        
+        /* Custom button styling */
+        div.stButton > button {
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+        
+        div.stButton > button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
     </style>
     """, unsafe_allow_html=True)
@@ -252,44 +242,24 @@ def main():
     # Custom Toggle Buttons
     st.markdown("<p>Choose Input Method</p>", unsafe_allow_html=True)
     
-    # Create custom HTML/CSS buttons that look like in your reference image
-    upload_bg_color = "#FF5C0A" if st.session_state.active_mode == "upload" else "#FFFFFF"
-    upload_text_color = "#FFFFFF" if st.session_state.active_mode == "upload" else "#333333"
-    record_bg_color = "#FF5C0A" if st.session_state.active_mode == "record" else "#FFFFFF"
-    record_text_color = "#FFFFFF" if st.session_state.active_mode == "record" else "#333333"
+    # Use columns to center the buttons
+    col1, col2, col3 = st.columns([1, 2, 1])
     
-    st.markdown(f"""
-    <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
-        <button 
-            id="upload-btn" 
-            class="custom-btn" 
-            style="background-color: {upload_bg_color}; color: {upload_text_color}; border: 1px solid #E0E0E0;"
-            onclick="document.querySelector('[data-testid=\\"stButton\\"] button:first-child').click();">
-            Upload Audio
-        </button>
-        <button 
-            id="record-btn" 
-            class="custom-btn" 
-            style="background-color: {record_bg_color}; color: {record_text_color}; border: 1px solid #E0E0E0;"
-            onclick="document.querySelector('[data-testid=\\"stButton\\"] button:nth-child(2)').click();">
-            Live Audio Capture
-        </button>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Hidden buttons that actually trigger the Streamlit state changes
-    col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
-        # These are hidden buttons that will be triggered by JavaScript
-        upload_btn = st.button("Upload Audio", 
-                              key="upload_audio_btn",
-                              type="primary" if st.session_state.active_mode == "upload" else "secondary",
-                              use_container_width=False)
+        # Create a 2-column layout within the center column
+        btn_col1, btn_col2 = st.columns(2)
         
-        record_btn = st.button("Live Audio Capture", 
-                              key="live_audio_btn",
-                              type="primary" if st.session_state.active_mode == "record" else "secondary",
-                              use_container_width=False)
+        with btn_col1:
+            upload_btn = st.button("Upload Audio", 
+                                  key="upload_audio_btn",
+                                  type="primary" if st.session_state.active_mode == "upload" else "secondary",
+                                  use_container_width=True)
+        
+        with btn_col2:
+            record_btn = st.button("Live Audio Capture", 
+                                  key="live_audio_btn",
+                                  type="primary" if st.session_state.active_mode == "record" else "secondary",
+                                  use_container_width=True)
     
     # Handle button clicks to set active mode
     if upload_btn:
