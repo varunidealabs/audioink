@@ -410,11 +410,7 @@ def main():
                     <span style="color: #FF5C0A; font-weight: 500;">Record your voice</span>
                 </div>
             </div>
-            
-            <div style="background-color: #f8f9fa; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 20px;">
-                <p style="color: #637082; margin-bottom: 15px;">Click the microphone button below and speak clearly. When you're done, click again to stop recording.</p>
-                <div style="font-size: 40px; margin-bottom: 10px;">🎙️</div>
-            </div>
+
             """, unsafe_allow_html=True)
             
             audio_data = st.audio_input("Record your audio")
