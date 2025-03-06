@@ -118,7 +118,7 @@ def local_css():
         }
         
         /* Custom toggle button styling */
-        /* Style improvements for the file uploader */
+        /* Style improvements for the file uploader - these won't work as well as the inline CSS */
         .uploadedFile {
             border-radius: 12px !important;
             border: 2px dashed #FF5C0A !important;
@@ -130,27 +130,6 @@ def local_css():
         .uploadedFile:hover {
             background-color: rgba(255, 92, 10, 0.1) !important;
             border-color: #FF7D3C !important;
-        }
-        
-        /* Style the file upload label and button */
-        div[data-testid="stFileUploader"] label {
-            font-weight: 500 !important;
-            color: #2c3e50 !important;
-            font-size: 16px !important;
-        }
-        
-        div[data-testid="stFileUploader"] button {
-            background-color: #f8f9fa !important;
-            color: #2c3e50 !important;
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 8px !important;
-            font-weight: 500 !important;
-            transition: all 0.3s ease !important;
-        }
-        
-        div[data-testid="stFileUploader"] button:hover {
-            background-color: #e9ecef !important;
-            border-color: #cbd3da !important;
         }
         
         /* Styling for the audio input section */
@@ -189,26 +168,6 @@ def local_css():
         div.stButton > button:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        /* Add an icon for the upload zone */
-        div[data-testid="stFileUploader"] {
-            position: relative;
-        }
-        
-        div[data-testid="stFileUploader"]::before {
-            content: '';
-            display: block;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23FF5C0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>');
-            width: 40px;
-            height: 40px;
-            background-repeat: no-repeat;
-            background-position: center;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            z-index: 1;
-            opacity: 0.7;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -340,10 +299,65 @@ def main():
 
     # Upload Audio Section
     if st.session_state.active_mode == "upload":
+        # Create a visually appealing upload container
         st.markdown("""
-        <div style="text-align: center; margin-bottom: 15px;">
+        <style>
+            /* Custom styling for the file uploader */
+            [data-testid="stFileUploader"] {
+                width: 100%;
+            }
+            
+            [data-testid="stFileUploader"] section {
+                border: 2px dashed #FF5C0A !important;
+                border-radius: 12px !important;
+                padding: 30px !important;
+                background-color: rgba(255, 92, 10, 0.03) !important;
+                text-align: center !important;
+                transition: all 0.3s ease !important;
+                position: relative;
+            }
+            
+            [data-testid="stFileUploader"] section:hover {
+                background-color: rgba(255, 92, 10, 0.08) !important;
+                border-color: #FF7D3C !important;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(255, 92, 10, 0.15);
+            }
+            
+            /* Hide default text */
+            [data-testid="stFileUploader"] section p {
+                display: none !important;
+            }
+            
+            /* Hide the default button and recreate it */
+            [data-testid="stFileUploader"] section button {
+                display: none !important;
+            }
+        </style>
+        
+        <div style="text-align: center; margin-bottom: 25px; margin-top: 10px;">
             <div style="display: inline-block; background-color: rgba(255, 92, 10, 0.1); padding: 8px 16px; border-radius: 20px;">
                 <span style="color: #FF5C0A; font-weight: 500;">Upload your audio file</span>
+            </div>
+        </div>
+        
+        <div class="custom-uploader" style="position: relative; margin-bottom: 20px;">
+            <!-- Custom upload icon -->
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 0; pointer-events: none;">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#FF5C0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <div style="margin-top: 15px; font-size: 18px; color: #637082; font-weight: 500;">Drag and drop file here</div>
+                    <div style="margin-top: 10px; font-size: 14px; color: #8795a1;">
+                        <span style="color: #FF5C0A; font-weight: 500;">Browse files</span> or drop your audio
+                    </div>
+                    <div style="margin-top: 10px; font-size: 12px; color: #8795a1;">
+                        Limit 200MB per file • MP3, MP4, MPEG, MPGA, M4A, WAV, WEBM
+                    </div>
+                </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -359,13 +373,23 @@ def main():
             file_type = uploaded_file.type
             
             st.markdown(f"""
-            <div style="background-color: #f8f9fa; border-radius: 8px; padding: 10px 15px; margin: 10px 0; display: flex; align-items: center;">
-                <div style="background-color: #FF5C0A; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
-                    <span style="color: white; font-size: 20px;">🎵</span>
+            <div style="background-color: #f8f9fa; border-radius: 10px; padding: 15px; margin: 15px 0; display: flex; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                <div style="background: linear-gradient(135deg, #FF5C0A 0%, #FF8F53 100%); width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 3px 6px rgba(255,92,10,0.2);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18V5l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="18" cy="16" r="3"></circle>
+                    </svg>
                 </div>
-                <div>
-                    <div style="font-weight: 600; color: #2c3e50;">{uploaded_file.name}</div>
-                    <div style="font-size: 12px; color: #6c757d;">{file_type} • {file_size_kb:.1f} KB</div>
+                <div style="flex-grow: 1;">
+                    <div style="font-weight: 600; color: #2c3e50; font-size: 16px; margin-bottom: 4px; display: flex; justify-content: space-between;">
+                        <span>{uploaded_file.name}</span>
+                        <span style="color: #FF5C0A; font-size: 14px;">{file_size_kb:.1f} KB</span>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="font-size: 13px; color: #6c757d; background-color: rgba(108,117,125,0.1); padding: 2px 8px; border-radius: 12px;">{file_type}</div>
+                        <div style="font-size: 13px; color: #28a745;">Ready to transcribe</div>
+                    </div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -376,18 +400,22 @@ def main():
                 st.error(message)
             
             # Transcribe Button
-            if st.button("Transcribe", key="upload_transcribe", use_container_width=False):
-                # Convert to WAV
-                processed_file = convert_to_wav(uploaded_file)
-                
-                if processed_file:
-                    # Attempt Transcription
-                    success, result = transcribe_audio(processed_file)
+            col1, col2, col3 = st.columns([1, 1, 1])
+            with col2:
+                if st.button("🎧 Transcribe Now", key="upload_transcribe", use_container_width=True, type="primary"):
+                    # Convert to WAV
+                    with st.spinner("Converting audio..."):
+                        processed_file = convert_to_wav(uploaded_file)
                     
-                    if success:
-                        transcription_result = result
-                    else:
-                        st.error(result)
+                    if processed_file:
+                        # Attempt Transcription
+                        with st.spinner("Transcribing your audio..."):
+                            success, result = transcribe_audio(processed_file)
+                        
+                        if success:
+                            transcription_result = result
+                        else:
+                            st.error(result)
 
     # Record Audio Section
     elif st.session_state.active_mode == "record":
