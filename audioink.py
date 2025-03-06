@@ -277,7 +277,7 @@ def main():
     ''', unsafe_allow_html=True)
     
     # Custom Toggle Buttons
-    st.markdown("<p>Choose Input Method</p>", unsafe_allow_html=True)
+    st.markdown("<p>Let's try this out </p>", unsafe_allow_html=True)
     
     # Use columns to center the buttons
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -508,31 +508,6 @@ def main():
                 )
             
             st.markdown("</div>", unsafe_allow_html=True)
-
-    # Modern Footer with App Info Card
-    st.markdown("""
-    <div style="margin-top: 4rem;">
-        <div style="max-width: 800px; margin: 0 auto; background-color: #f3f4f6; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-            <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                <div style="width: 40px; height: 40px; position: relative; overflow: hidden; border-radius: 50%; margin-right: 15px; background: linear-gradient(135deg, #FF5C0A 0%, #FF8F53 100%);">
-                </div>
-                <div>
-                    <h3 style="margin: 0; color: #2c3e50; font-size: 18px;">AudioInk</h3>
-                    <p style="margin: 0; color: #637082; font-size: 14px;">Voice to text, simplified.</p>
-                </div>
-            </div>
-            <div style="display: flex; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: 15px; font-size: 14px;">
-                <div style="color: #637082;">
-                    Built by <a href="https://idealabs.fyi" target="_blank" style="color: #FF5C0A; text-decoration: none;">Ideal Labs</a>
-                </div>
-                <div>
-                    <a href="#privacy-policy" style="color: #637082; margin-right: 15px; text-decoration: none;">Privacy</a>
-                    <a href="#terms-of-use" style="color: #637082; text-decoration: none;">Terms</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
