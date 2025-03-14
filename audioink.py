@@ -5,7 +5,6 @@ from io import BytesIO
 from pydub import AudioSegment
 from pydub.utils import which
 from PIL import Image
-import base64
 
 # Set FFmpeg paths automatically
 AudioSegment.converter = which("ffmpeg")
@@ -87,6 +86,18 @@ def local_css():
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        @keyframes wave1 {
+            0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+            50% { transform: translateX(10%) translateY(-10%) rotate(180deg); }
+        }
+        @keyframes wave2 {
+            0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+            50% { transform: translateX(-10%) translateY(10%) rotate(-180deg); }
+        }
+        @keyframes wave3 {
+            0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+            50% { transform: translateX(5%) translateY(-5%) rotate(90deg); }
+        }
         
         .hero-title {
             font-size: 3.5rem;
@@ -106,6 +117,56 @@ def local_css():
             text-align: left;
         }
         
+        /* Custom toggle button styling */
+        /* Style improvements for the file uploader - these won't work as well as the inline CSS */
+        .uploadedFile {
+            border-radius: 12px !important;
+            border: 2px dashed #FF5C0A !important;
+            background-color: rgba(255, 92, 10, 0.05) !important;
+            padding: 20px !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .uploadedFile:hover {
+            background-color: rgba(255, 92, 10, 0.1) !important;
+            border-color: #FF7D3C !important;
+        }
+        
+        /* Styling for the audio input section - enhance the circular buttons */
+        div[data-testid="stAudioInput"] {
+            border-radius: 12px !important;
+            border: 2px solid #FF5C0A !important;
+            background-color: rgba(255, 92, 10, 0.05) !important;
+            padding: 12px !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+            margin-top: 8px !important;
+        }
+        
+        div[data-testid="stAudioInput"] button {
+            background-color: #FF5C0A !important;
+            color: white !important;
+            border-radius: 50% !important;
+            width: 56px !important;
+            height: 56px !important;
+            box-shadow: 0 4px 10px rgba(255, 92, 10, 0.3) !important;
+            transition: all 0.3s ease !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        
+        div[data-testid="stAudioInput"] button:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 6px 12px rgba(255, 92, 10, 0.4) !important;
+        }
+        
+        /* Style the waveform container */
+        div[data-testid="stAudioInput"] > div:nth-child(2) {
+            background-color: #f8f9fa !important;
+            border-radius: 8px !important;
+            padding: 8px 12px !important;
+        }
+        
         /* Custom button styling */
         div.stButton > button {
             font-weight: 500;
@@ -119,291 +180,12 @@ def local_css():
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
-        /* Custom audio recorder styling */
-        .custom-audio-recorder {
-            border-radius: 12px;
-            border: 2px solid #FF5C0A;
-            background-color: rgba(255, 92, 10, 0.05);
-            padding: 20px;
-            margin-top: 20px;
-        }
-        
-        .audio-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .audio-button {
-            background-color: #FF5C0A;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 56px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(255, 92, 10, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .audio-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(255, 92, 10, 0.4);
-        }
-        
-        .audio-waveform {
-            height: 60px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .waveform-placeholder {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin: 0 auto;
-        }
-        
-        .waveform-placeholder .bar {
-            width: 3px;
-            background-color: #FF5C0A;
-            opacity: 0.5;
-            border-radius: 1px;
-        }
-        
-        .timer {
-            color: #637082;
-            font-size: 14px;
-            font-weight: 500;
-            margin-left: 10px;
-        }
-        
-        /* Custom file uploader styling */
-        .custom-file-uploader {
-            border: 2px dashed #FF5C0A;
-            border-radius: 12px;
-            padding: 30px;
-            background-color: rgba(255, 92, 10, 0.03);
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .custom-file-uploader:hover {
-            background-color: rgba(255, 92, 10, 0.08);
-            border-color: #FF7D3C;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 92, 10, 0.15);
+        /* Hide the download button in the audio recording interface */
+        div[data-testid="stAudioInput"] > div:nth-child(3) > div:nth-child(1) {
+            display: none !important;
         }
     </style>
     """, unsafe_allow_html=True)
-
-# Custom Audio Recorder HTML
-def custom_audio_recorder():
-    # Custom JavaScript for audio recording
-    custom_js = """
-    <script>
-        // Audio Recording Variables
-        let mediaRecorder;
-        let audioChunks = [];
-        let isRecording = false;
-        let audioBlob = null;
-        let audioUrl = null;
-        let timerInterval = null;
-        let startTime = 0;
-        
-        const startRecording = () => {
-            document.getElementById('record-button').style.display = 'none';
-            document.getElementById('stop-button').style.display = 'flex';
-            document.getElementById('waveform-placeholder').style.display = 'flex';
-            document.getElementById('timer').textContent = '00:00';
-            
-            // Start timer
-            startTime = Date.now();
-            timerInterval = setInterval(updateTimer, 1000);
-            
-            // Animation for waveform
-            animateWaveform();
-            
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(stream => {
-                    mediaRecorder = new MediaRecorder(stream);
-                    mediaRecorder.ondataavailable = event => {
-                        audioChunks.push(event.data);
-                    };
-                    
-                    mediaRecorder.onstop = () => {
-                        audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                        audioUrl = URL.createObjectURL(audioBlob);
-                        
-                        // Enable play button
-                        document.getElementById('play-button').style.display = 'flex';
-                        
-                        // Enable the delete button
-                        document.getElementById('delete-button').style.display = 'flex';
-                        
-                        // Show success message
-                        document.getElementById('success-message').style.display = 'block';
-                        
-                        // Send data to Streamlit
-                        const reader = new FileReader();
-                        reader.readAsDataURL(audioBlob);
-                        reader.onloadend = function() {
-                            const base64data = reader.result.split(',')[1];
-                            // Set the data in a hidden input that Streamlit can access
-                            document.getElementById('audio-data').value = base64data;
-                            // Trigger change event for Streamlit to detect
-                            const event = new Event('change');
-                            document.getElementById('audio-data').dispatchEvent(event);
-                        };
-                    };
-                    
-                    audioChunks = [];
-                    mediaRecorder.start();
-                    isRecording = true;
-                })
-                .catch(error => {
-                    console.error('Error accessing microphone:', error);
-                    document.getElementById('record-button').style.display = 'flex';
-                    document.getElementById('stop-button').style.display = 'none';
-                });
-        };
-        
-        const stopRecording = () => {
-            if (mediaRecorder && isRecording) {
-                mediaRecorder.stop();
-                isRecording = false;
-                
-                // Stop the timer
-                clearInterval(timerInterval);
-                
-                // Update UI
-                document.getElementById('record-button').style.display = 'flex';
-                document.getElementById('stop-button').style.display = 'none';
-            }
-        };
-        
-        const playAudio = () => {
-            if (audioUrl) {
-                const audio = new Audio(audioUrl);
-                audio.play();
-            }
-        };
-        
-        const deleteAudio = () => {
-            audioChunks = [];
-            audioBlob = null;
-            if (audioUrl) {
-                URL.revokeObjectURL(audioUrl);
-                audioUrl = null;
-            }
-            
-            // Reset UI
-            document.getElementById('play-button').style.display = 'none';
-            document.getElementById('delete-button').style.display = 'none';
-            document.getElementById('waveform-placeholder').style.display = 'none';
-            document.getElementById('success-message').style.display = 'none';
-            document.getElementById('timer').textContent = '';
-            
-            // Clear hidden input
-            document.getElementById('audio-data').value = '';
-            const event = new Event('change');
-            document.getElementById('audio-data').dispatchEvent(event);
-        };
-        
-        const updateTimer = () => {
-            const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-            const minutes = Math.floor(elapsedTime / 60).toString().padStart(2, '0');
-            const seconds = (elapsedTime % 60).toString().padStart(2, '0');
-            document.getElementById('timer').textContent = `${minutes}:${seconds}`;
-        };
-        
-        const animateWaveform = () => {
-            const bars = document.querySelectorAll('.waveform-placeholder .bar');
-            
-            bars.forEach(bar => {
-                const height = Math.floor(Math.random() * 30) + 5;
-                bar.style.height = `${height}px`;
-            });
-            
-            if (isRecording) {
-                setTimeout(animateWaveform, 200);
-            } else {
-                // Reset bars
-                bars.forEach(bar => {
-                    bar.style.height = '20px';
-                });
-            }
-        };
-    </script>
-    """
-    
-    # Custom HTML for audio recorder
-    html_content = f"""
-    <div class="custom-audio-recorder">
-        <div class="audio-controls">
-            <button id="record-button" class="audio-button" onclick="startRecording()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
-                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                    <line x1="12" x2="12" y1="19" y2="22"></line>
-                </svg>
-            </button>
-            
-            <button id="stop-button" class="audio-button" onclick="stopRecording()" style="display: none;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="6" height="6" x="9" y="9"></rect>
-                </svg>
-            </button>
-            
-            <button id="play-button" class="audio-button" onclick="playAudio()" style="display: none;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                </svg>
-            </button>
-            
-            <button id="delete-button" class="audio-button" onclick="deleteAudio()" style="display: none;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 6h18"></path>
-                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                </svg>
-            </button>
-            
-            <div class="audio-waveform">
-                <div id="waveform-placeholder" class="waveform-placeholder" style="display: none;">
-                    {' '.join([f'<div class="bar" style="height: 20px;"></div>' for _ in range(30)])}
-                </div>
-                <span id="timer" class="timer"></span>
-            </div>
-        </div>
-        
-        <input type="hidden" id="audio-data" name="audio_data">
-    </div>
-    
-    <div id="success-message" style="display: none; background-color: #e8f5e9; border-radius: 8px; padding: 12px; margin: 15px 0; border-left: 4px solid #4caf50;">
-        <div style="display: flex; align-items: center;">
-            <div style="background-color: #4caf50; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
-                <span style="color: white; font-size: 16px;">✓</span>
-            </div>
-            <div style="font-weight: 500; color: #2e7d32;">Audio recorded successfully!</div>
-        </div>
-    </div>
-    
-    {custom_js}
-    """
-    
-    return html_content
 
 # API Configuration
 AZURE_WHISPER_API_URL = st.secrets.get("AZURE_WHISPER_API_URL", "https://your-api-endpoint.azure.com")
@@ -469,9 +251,6 @@ def main():
     # Initialize session state to track which mode is active
     if 'active_mode' not in st.session_state:
         st.session_state.active_mode = None
-    
-    if 'audio_data' not in st.session_state:
-        st.session_state.audio_data = None
     
     # Header Container with Logo and Title
     st.markdown('''
@@ -541,6 +320,45 @@ def main():
         with col2:
             # Create a visually appealing upload container
             st.markdown("""
+            <style>
+                /* Custom styling for the file uploader */
+                [data-testid="stFileUploader"] {
+                    width: 100%;
+                }
+                
+                [data-testid="stFileUploader"] section {
+                    border: 2px dashed #FF5C0A !important;
+                    border-radius: 12px !important;
+                    padding: 30px !important;
+                    background-color: rgba(255, 92, 10, 0.03) !important;
+                    text-align: center !important;
+                    transition: all 0.3s ease !important;
+                    position: relative;
+                }
+                
+                [data-testid="stFileUploader"] section:hover {
+                    background-color: rgba(255, 92, 10, 0.08) !important;
+                    border-color: #FF7D3C !important;
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(255, 92, 10, 0.15);
+                }
+                
+                /* Hide default text */
+                [data-testid="stFileUploader"] section p {
+                    display: none !important;
+                }
+                
+                /* Hide the default button and recreate it */
+                [data-testid="stFileUploader"] section button {
+                    display: none !important;
+                }
+                
+                /* Hide the file preview */
+                .uploadedFile {
+                    display: none !important;
+                }
+            </style>
+            
             <div style="text-align: center; margin-bottom: 25px; margin-top: 10px;">
                 <div style="display: inline-block; background-color: rgba(255, 92, 10, 0.1); padding: 8px 16px; border-radius: 20px;">
                     <span style="color: #FF5C0A; font-weight: 500;">Upload your audio file</span>
@@ -615,33 +433,31 @@ def main():
             </div>
             """, unsafe_allow_html=True)
             
-            # Use custom audio recorder component
-            recorder_html = custom_audio_recorder()
-            audio_data = st.components.v1.html(recorder_html, height=180)
+            audio_data = st.audio_input("Record your audio")
             
-            # Get the audio data from the component via session state
-            audio_data_input = st.empty()
-            audio_data_base64 = audio_data_input.text_input("Hidden Audio Data", "", key="audio_data_input", label_visibility="collapsed")
-            
-            if audio_data_base64:
-                # Convert base64 to audio file
-                try:
-                    audio_bytes = base64.b64decode(audio_data_base64)
-                    audio_file = BytesIO(audio_bytes)
-                    audio_file.name = "recorded_audio.wav"
-                    st.session_state.audio_data = audio_file
-                except Exception as e:
-                    st.error(f"Error processing audio data: {str(e)}")
-            
-            if st.session_state.audio_data and st.button("Transcribe Recorded Audio", key="record_transcribe", use_container_width=True):
-                # Attempt Transcription
-                with st.spinner("Processing your audio..."):
-                    success, result = transcribe_audio(st.session_state.audio_data)
-                    
-                    if success:
-                        transcription_result = result
-                    else:
-                        st.error(result)
+            if audio_data:
+                st.markdown("""
+                <div style="background-color: #e8f5e9; border-radius: 8px; padding: 12px; margin: 15px 0; border-left: 4px solid #4caf50;">
+                    <div style="display: flex; align-items: center;">
+                        <div style="background-color: #4caf50; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                            <span style="color: white; font-size: 16px;">✓</span>
+                        </div>
+                        <div style="font-weight: 500; color: #2e7d32;">Audio recorded successfully!</div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Removed audio preview display
+                
+                if st.button("Transcribe Recorded Audio", key="record_transcribe", use_container_width=True):
+                    # Attempt Transcription
+                    with st.spinner("Processing your audio..."):
+                        success, result = transcribe_audio(audio_data)
+                        
+                        if success:
+                            transcription_result = result
+                        else:
+                            st.error(result)
 
     # Display Transcription Result
     if transcription_result:
@@ -685,6 +501,8 @@ def main():
                     file_name=txt_filename,
                     mime="text/plain"
                 )
+            
+            st.markdown("</div>", unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
