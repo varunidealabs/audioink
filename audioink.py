@@ -180,9 +180,23 @@ def local_css():
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
-        /* Hide the download button in the audio recording interface */
-        div[data-testid="stAudioInput"] > div:nth-child(3) > div:nth-child(1) {
+        /* OPTION 1: Hide the download button in the audio recording interface */
+        div[data-testid="stAudioInput"] > div:last-child > div:first-child {
             display: none !important;
+        }
+        
+        /* OPTION 2: Alternatively, you can add space between buttons instead of hiding */
+        /*
+        div[data-testid="stAudioInput"] > div:last-child > div:first-child {
+            margin-right: 15px !important;
+        }
+        */
+        
+        /* This ensures Streamlit button container styling is maintained */
+        div[data-testid="stAudioInput"] > div:last-child {
+            display: flex !important;
+            justify-content: flex-end !important;
+            gap: 15px !important;
         }
     </style>
     """, unsafe_allow_html=True)
