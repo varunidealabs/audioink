@@ -483,7 +483,7 @@ def main():
             
             with col1:
                 # Copy button (simulated with download)
-                if st.button("📋 Copy to Clipboard", type="secondary"):
+                if st.button(" Copy to Clipboard", type="secondary"):
                     st.info("Text copied to clipboard functionality would be implemented here in a full app")
             
             with col2:
@@ -491,7 +491,7 @@ def main():
                 txt_filename = "transcription.txt"
                 txt_bytes = BytesIO(transcription_result.encode("utf-8"))
                 st.download_button(
-                    label="⬇️ Download Transcription",
+                    label=" Download Transcription",
                     data=txt_bytes,
                     file_name=txt_filename,
                     mime="text/plain"
