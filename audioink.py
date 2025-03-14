@@ -207,6 +207,80 @@ API_KEY = st.secrets.get("AZURE_API_KEY", "your_api_key_here")
 SUPPORTED_FORMATS = ["mp3", "mp4", "mpeg", "mpga", "m4a", "wav", "webm"]
 MAX_FILE_SIZE = 25 * 1024 * 1024
 
+def clean_transcription(text):
+    """
+    Clean up transcription text by removing unwanted symbols and fixing formatting.
+    
+    Args:
+        text (str): The raw transcription text from the API
+        
+    Returns:
+        str: Cleaned and formatted text
+    """
+    if not text:
+        return ""
+        
+    # 1. Remove common transcription artifacts and symbols
+    # Common musical note symbols, bullets, etc.
+    symbols_to_remove = ['♪', '•', '¶', '§', '†', '‡', '©', '®', '™', '℠', '℗', '〈', '〉', '⟨', '⟩']
+    for symbol in symbols_to_remove:
+        text = text.replace(symbol, '')
+    
+    # 2. Remove speaker annotations like [Speaker 1]:
+    text = re.sub(r'\[\w+\s*\d*\]:', '', text)
+    
+    # 3. Remove timestamps like [00:15] or (00:15)
+    text = re.sub(r'[\[\(]\d+:\d+[\]\)]', '', text)
+    
+    # 4. Keep only alphanumeric characters, spaces, and basic punctuation
+    text = re.sub(r'[^\w\s.,?!\'"-]', '', text)
+    
+    # 5. Replace multiple spaces with a single space
+    text = re.sub(r'\s+', ' ', text)
+    
+    # 6. Remove any repeated punctuation
+    text = re.sub(r'([.,?!]){2,}', r'\1', text)
+    
+    # 7. Fix common transcription errors
+    common_fixes = {
+        "i m ": "I'm ",
+        "dont ": "don't ",
+        "cant ": "can't ",
+        "wont ": "won't ",
+        "im ": "I'm ",
+        "Id ": "I'd ",
+        "Ill ": "I'll ",
+        "lets ": "let's ",
+        "its ": "it's ",
+        # Add more as needed
+    }
+    
+    for original, replacement in common_fixes.items():
+        text = text.replace(original, replacement)
+    
+    # 8. Fix capitalization
+    # Capitalize first letter of sentences
+    sentences = re.split(r'([.!?]\s+)', text)
+    result = ""
+    
+    for i in range(0, len(sentences), 2):
+        if i < len(sentences):
+            # Capitalize first letter of sentence if it exists and has content
+            if sentences[i] and len(sentences[i]) > 0:
+                sentences[i] = sentences[i][0].upper() + sentences[i][1:]
+            
+            # Add the sentence
+            result += sentences[i]
+            
+            # Add the separator (period, exclamation mark, etc.) if it exists
+            if i + 1 < len(sentences):
+                result += sentences[i + 1]
+    
+    # Always capitalize 'I'
+    result = re.sub(r'\bi\b', 'I', result)
+    
+    return result.strip()
+
 def transcribe_audio(audio_file):
     headers = {
         "api-key": API_KEY, 
@@ -225,8 +299,12 @@ def transcribe_audio(audio_file):
             )
             
             if response.status_code == 200:
-                transcription = response.json().get("text", "No text returned")
-                return True, transcription
+                raw_transcription = response.json().get("text", "No text returned")
+                
+                # Apply the cleaning function to remove unwanted symbols
+                cleaned_transcription = clean_transcription(raw_transcription)
+                
+                return True, cleaned_transcription
             else:
                 return False, f"API Error: {response.status_code} - {response.text}"
     except Exception as e:
